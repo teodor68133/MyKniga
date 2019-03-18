@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+        <UserSecretsId>aspnet-MyKniga.Web-31CD96F1-99BA-46C9-8C24-89DB838E071D</UserSecretsId>
+        <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="8.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.App" />
+        <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\MyKniga.Common\MyKniga.Common.csproj" />
+        <ProjectReference Include="..\MyKniga.Data\MyKniga.Data.csproj" />
+        <ProjectReference Include="..\MyKniga.Services\MyKniga.Services.csproj" />
+    </ItemGroup>
+
+</Project>

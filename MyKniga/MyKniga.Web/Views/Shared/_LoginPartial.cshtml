@@ -1,0 +1,21 @@
+@if (User.Identity.IsAuthenticated)
+{
+    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/" method="post" id="logoutForm">
+        <li class="nav-item navbar-popover"
+            data-toggle="tooltip" data-placement="bottom" title="Logout">
+            <a class="nav-link" href="javascript:document.getElementById('logoutForm').submit()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span class="ml-2 d-md-none">Logout</span>
+            </a>
+        </li>
+    </form>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">Register</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">Login</a>
+    </li>
+}
