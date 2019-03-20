@@ -4,6 +4,5 @@ namespace MyKniga.Models
 
     public class KnigaUser : IdentityUser
     {
-        
     }
 }

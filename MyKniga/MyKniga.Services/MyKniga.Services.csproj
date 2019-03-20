@@ -7,4 +7,9 @@
     <ItemGroup>
         <PackageReference Include="AutoMapper" Version="8.0.0" />
     </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\MyKniga.Common\MyKniga.Common.csproj" />
+      <ProjectReference Include="..\MyKniga.Data\MyKniga.Data.csproj" />
+    </ItemGroup>
 </Project>

@@ -15,6 +15,8 @@
     using Microsoft.Extensions.DependencyInjection;
     using MyKniga.Data;
     using MyKniga.Models;
+    using Services;
+    using Services.Interfaces;
 
     public class Startup
     {
@@ -55,6 +57,8 @@
             services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
             services.AddResponseCompression(opt => opt.EnableForHttps = true);
+
+            services.AddScoped<IBooksService, BooksService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

@@ -1,11 +1,11 @@
-namespace MyKniga.Models
+namespace MyKniga.Web.Models
 {
     using System.ComponentModel.DataAnnotations;
+    using Common.Mapping.Interfaces;
+    using Services.Models;
 
-    public class Book
+    public class BookCreateBindingModel : IMapWith<BookCreateServiceModel>
     {
-        public string Id { get; set; }
-
         [Required]
         [MaxLength(30)]
         public string Title { get; set; }
@@ -15,6 +15,7 @@ namespace MyKniga.Models
         public string Author { get; set; }
 
         [Required]
+        [Range(typeof(decimal), "0", "10000")]
         public decimal Price { get; set; }
     }
 }
