@@ -1,10 +1,12 @@
 namespace MyKniga.Web.Controllers
 {
+    using System.Threading.Tasks;
     using AutoMapper;
     using Common;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Models;
+    using Newtonsoft.Json;
     using Services.Interfaces;
     using Services.Models;
 
@@ -37,6 +39,18 @@ namespace MyKniga.Web.Controllers
             this.booksService.CreateBookAsync(serviceBook);
 
             return this.RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult Index()
+        {
+            return this.View();
+        }
+
+        public async Task<IActionResult> GetBooks()
+        {
+            var allBooks = await this.booksService.GetAllBooksAsync();
+
+            return this.Ok(allBooks);
         }
     }
 }

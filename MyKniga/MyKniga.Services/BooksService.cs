@@ -1,9 +1,13 @@
 namespace MyKniga.Services
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using Data;
     using Interfaces;
+    using Microsoft.EntityFrameworkCore;
     using Models;
     using MyKniga.Models;
 
@@ -22,6 +26,16 @@ namespace MyKniga.Services
             await this.Context.SaveChangesAsync();
 
             return dbBook.Id;
+        }
+
+        public async Task<IEnumerable<BookListingServiceModel>> GetAllBooksAsync()
+        {
+            var serviceBooks = await this.Context.Books
+                .OrderBy(b => b.Title)
+                .ProjectTo<BookListingServiceModel>()
+                .ToArrayAsync();
+
+            return serviceBooks;
         }
     }
 }
