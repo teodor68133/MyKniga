@@ -11,11 +11,11 @@ function refreshBooks() {
                         <img src="https://www.petmd.com/sites/default/files/Acute-Dog-Diarrhea-47066074.jpg" class="card-img-top book-thumbnail-img" alt="...">
                         <div class="card-body">
                             <h6 class="card-title">${book.title}</h6>
-                            <p class="card-text">${book.price}$
+                            <p class="card-text">€${book.price}
                                 <br>
                                 ${book.author}
                             </p>
-                            <a href="#" class="btn btn-link stretched-link">Details</a>
+                            <a href="/books/details/${book.id}" class="btn btn-link stretched-link">Details</a>
                         </div>
                     </div>
                 </div>`;

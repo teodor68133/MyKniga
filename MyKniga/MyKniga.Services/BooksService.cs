@@ -37,5 +37,14 @@ namespace MyKniga.Services
 
             return serviceBooks;
         }
+
+        public async Task<BookDetailsServiceModel> GetBookByIdAsync(string id)
+        {
+            var serviceBook = await this.Context.Books
+                .ProjectTo<BookDetailsServiceModel>()
+                .SingleOrDefaultAsync(b => b.Id == id);
+
+            return serviceBook;
+        }
     }
 }

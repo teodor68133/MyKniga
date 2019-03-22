@@ -6,7 +6,6 @@ namespace MyKniga.Web.Controllers
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Models;
-    using Newtonsoft.Json;
     using Services.Interfaces;
     using Services.Models;
 
@@ -51,6 +50,25 @@ namespace MyKniga.Web.Controllers
             var allBooks = await this.booksService.GetAllBooksAsync();
 
             return this.Ok(allBooks);
+        }
+
+        public async Task<IActionResult> Details(string id)
+        {
+            if (id == null)
+            {
+                return this.NotFound();
+            }
+            
+            var book = await this.booksService.GetBookByIdAsync(id);
+
+            if (book == null)
+            {
+                return this.NotFound();
+            }
+
+            var viewBook = Mapper.Map<BookDetailsViewModel>(book);
+            
+            return this.View(viewBook);
         }
     }
 }
