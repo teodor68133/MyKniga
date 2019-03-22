@@ -16,5 +16,29 @@ namespace MyKniga.Models
 
         [Required]
         public decimal Price { get; set; }
+
+        [Required]
+        [Range(0, int.MaxValue)]
+        public int Year { get; set; }
+
+        [Required]
+        [MaxLength(1500)]
+        public string Description { get; set; }
+        
+        [Required]
+        [MaxLength(200)]
+        public string ShortDescription { get; set; }
+
+        [Required]
+        [Range(0, int.MaxValue)]
+        public int Pages { get; set; }
+        
+        [Required]
+        [MaxLength(150)]
+        public string ImageUrl { get; set; }
+        
+        [Required]
+        [MaxLength(13)]
+        public string Isbn { get; set; }
     }
 }

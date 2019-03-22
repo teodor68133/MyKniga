@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyKniga.Data;
 
 namespace MyKniga.Data.Migrations
 {
     [DbContext(typeof(MyKnigaDbContext))]
-    partial class MyKnigaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190322212457_AddMorePropertiesToBook")]
+    partial class AddMorePropertiesToBook
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
