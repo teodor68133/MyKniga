@@ -7,6 +7,11 @@
 }
 
 .book-thumbnail-img {
-    height: 30vh; 
+    height: 30vh;
+    object-fit: cover;
+}
+
+.book-details-img {
+    max-width: 100%;
     object-fit: cover;
 }
