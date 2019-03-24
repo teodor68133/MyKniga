@@ -1,5 +1,6 @@
 namespace MyKniga.Web.Models
 {
+    using System.Collections.Generic;
     using Common.Mapping.Interfaces;
     using Services.Models;
 
@@ -24,5 +25,9 @@ namespace MyKniga.Web.Models
         public string ImageUrl { get; set; }
         
         public string Isbn { get; set; }
+        
+        public IEnumerable<BookTagDisplayViewModel> BookTags { get; set; }
+        
+        public IEnumerable<TagDisplayViewModel> AllTags { get; set; }
     }
 }

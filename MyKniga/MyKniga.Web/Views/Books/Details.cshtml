@@ -26,6 +26,40 @@
         </div>
     </div>
 </div>
+<h4 class="my-2" style="line-height: 2em" id="tagList">
+    @foreach (var bookTag in Model.BookTags.OrderBy(bt => bt.Tag.Name))
+    {
+        <span class="badge badge-dark badge-pill bg-darker p-2" data-tagid="@bookTag.TagId">
+            @bookTag.Tag.Name
+            @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                <button type="button" class="btn btn-link p-0 m-0 text-light font-weight-bold" onclick="removeTag(this)">
+                    <i class="fas fa-times-circle"></i>
+                </button>
+            }
+        </span>
+    }
+</h4>
+
+@if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+{
+    <div class="input-group my-3 w-50">
+        <select class="custom-select" id="addTagDropdown">
+            <option selected="selected" disabled="disabled">Add tag...</option>
+            @foreach (var tag in Model.AllTags)
+            {
+                <option value="@tag.Id">@tag.Name</option>
+            }
+        </select>
+
+        <div class="input-group-append">
+            <button class="btn btn-primary" onclick="addSelectedTag()">Add</button>
+        </div>
+
+    </div>
+
+    <form method="post" asp-action="AddTagToBook" id="addTagForm"></form>
+}
 
 <div class="row jumbotron mt-3 shadow">
     <div class="col-12 col-md-3">
@@ -48,3 +82,70 @@
         <p>@Model.Description</p>
     </div>
 </div>
+
+@section Scripts
+{
+    @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+    {
+        <script>
+            function removeTag(btn) {
+                let parent = $(btn).parent();
+
+                let tagId = parent.data('tagid');
+
+                $.ajax({
+                    url: '@Url.Action("RemoveTagFromBook")',
+                    type: 'POST',
+                    data: {
+                        bookId: '@Model.Id',
+                        tagId: tagId,
+                        __RequestVerificationToken:
+                            $('#addTagForm input[name=__RequestVerificationToken]').val()
+                    },
+                    success: function(result) {
+                        if (!result.success) {
+                            return;
+                        }
+
+                        parent.remove();
+                    }
+                });
+            }
+
+            function addSelectedTag() {
+                let dropdown = $('#addTagDropdown');
+
+                let selectedValue = dropdown.val();
+                let selectedText = dropdown.find('option:selected').text();
+
+                if (selectedValue == null) {
+                    return;
+                }
+
+                $.ajax({
+                    url: '@Url.Action("AddTagToBook")',
+                    type: 'POST',
+                    data: {
+                        bookId: '@Model.Id',
+                        tagId: selectedValue,
+                        __RequestVerificationToken:
+                            $('#addTagForm input[name=__RequestVerificationToken]').val()
+                    },
+                    success: function(result) {
+                        if (!result.success) {
+                            return;
+                        }
+
+                        $('#tagList').append(`
+                    <span class="badge badge-dark badge-pill bg-darker p-2" data-tagid="${selectedValue}">
+                        ${selectedText}
+                        <button type="button" class="btn btn-link p-0 m-0 text-light font-weight-bold" onclick="removeTag(this)">
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+                    </span>`);
+                    }
+                });
+            }
+        </script>
+    }
+}
