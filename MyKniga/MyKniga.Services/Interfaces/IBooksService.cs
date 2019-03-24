@@ -7,7 +7,7 @@ namespace MyKniga.Services.Interfaces
     public interface IBooksService
     {
         Task<string> CreateBookAsync(BookCreateServiceModel model);
-        Task<IEnumerable<BookListingServiceModel>> GetAllBooksAsync();
+        Task<IEnumerable<T>> GetAllBooksAsync<T>() where T : BaseBookServiceModel;
         Task<T> GetBookByIdAsync<T>(string id) where T : BaseBookServiceModel;
         Task<bool> AddTagToBookAsync(string bookId, string tagId);
         Task RemoveTagFromBookAsync(string bookId, string tagId);

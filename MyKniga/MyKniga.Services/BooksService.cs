@@ -10,6 +10,7 @@ namespace MyKniga.Services
     using Microsoft.EntityFrameworkCore;
     using Models.Book;
     using MyKniga.Models;
+    using Remotion.Linq.Clauses;
 
     public class BooksService : BaseService, IBooksService
     {
@@ -33,11 +34,12 @@ namespace MyKniga.Services
             return dbBook.Id;
         }
 
-        public async Task<IEnumerable<BookListingServiceModel>> GetAllBooksAsync()
+        public async Task<IEnumerable<T>> GetAllBooksAsync<T>()
+            where T : BaseBookServiceModel
         {
             var serviceBooks = await this.Context.Books
                 .OrderBy(b => b.Title)
-                .ProjectTo<BookListingServiceModel>()
+                .ProjectTo<T>()
                 .ToArrayAsync();
 
             return serviceBooks;

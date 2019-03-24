@@ -50,7 +50,7 @@ namespace MyKniga.Web.Controllers
 
         public async Task<IActionResult> GetBooks()
         {
-            var allBooks = await this.booksService.GetAllBooksAsync();
+            var allBooks = await this.booksService.GetAllBooksAsync<BookListingServiceModel>();
 
             return this.Ok(allBooks);
         }
