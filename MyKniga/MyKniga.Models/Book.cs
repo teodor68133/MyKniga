@@ -1,5 +1,6 @@
 namespace MyKniga.Models
 {
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     public class Book
@@ -40,5 +41,7 @@ namespace MyKniga.Models
         [Required]
         [MaxLength(13)]
         public string Isbn { get; set; }
+        
+        public ICollection<BookTag> BookTags { get; set; }
     }
 }

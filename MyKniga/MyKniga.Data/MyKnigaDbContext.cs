@@ -12,9 +12,12 @@ namespace MyKniga.Data
         }
 
         public DbSet<Book> Books { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<BookTag> BookTags { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<BookTag>().HasKey(bt => new {bt.BookId, bt.TagId});
             base.OnModelCreating(builder);
         }
     }
