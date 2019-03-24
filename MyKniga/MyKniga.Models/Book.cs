@@ -43,5 +43,7 @@ namespace MyKniga.Models
         public string Isbn { get; set; }
         
         public ICollection<BookTag> BookTags { get; set; }
+        
+        public ICollection<Purchase> Purchases { get; set; }
     }
 }

@@ -60,6 +60,7 @@
 
             services.AddScoped<IBooksService, BooksService>();
             services.AddScoped<ITagsService, TagsService>();
+            services.AddScoped<IPurchasesService, PurchasesService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

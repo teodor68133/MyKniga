@@ -18,9 +18,9 @@
         <div class="d-flex flex-row justify-content-between">
             <h2 class="text-primary d-inline-block">€@Model.Price</h2>
             <div>
-                <a href="#" class="btn btn-primary">
+                <a class="btn btn-primary" asp-controller="Purchase" asp-action="ConfirmPurchase" asp-route-bookId="@Model.Id">
                     <i class="fas fa-cart-plus"></i>
-                    Add to cart
+                    Purchase book
                 </a>
             </div>
         </div>
