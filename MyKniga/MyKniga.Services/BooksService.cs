@@ -46,5 +46,40 @@ namespace MyKniga.Services
 
             return serviceBook;
         }
+
+        public async Task<bool> AddTagToBookAsync(string bookId, string tagId)
+        {
+            if (!await this.Context.Tags.AnyAsync(t => t.Id == tagId) ||
+                !await this.Context.Books.AnyAsync(b => b.Id == bookId) ||
+                await this.Context.BookTags.AnyAsync(bt => bt.BookId == bookId && bt.TagId == tagId))
+            {
+                return false;
+            }
+
+            var bookTag = new BookTag
+            {
+                TagId = tagId,
+                BookId = bookId
+            };
+
+            await this.Context.BookTags.AddAsync(bookTag);
+            await this.Context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task RemoveTagFromBookAsync(string bookId, string tagId)
+        {
+            var bookTag = await this.Context.BookTags.SingleOrDefaultAsync(bt =>
+                bt.BookId == bookId && bt.TagId == tagId);
+
+            if (bookTag == null)
+            {
+                return;
+            }
+
+            this.Context.BookTags.Remove(bookTag);
+            await this.Context.SaveChangesAsync();
+        }
     }
 }

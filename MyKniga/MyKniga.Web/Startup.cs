@@ -59,6 +59,7 @@
             services.AddResponseCompression(opt => opt.EnableForHttps = true);
 
             services.AddScoped<IBooksService, BooksService>();
+            services.AddScoped<ITagsService, TagsService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
