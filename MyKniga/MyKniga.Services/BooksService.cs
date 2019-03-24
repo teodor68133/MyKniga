@@ -19,6 +19,11 @@ namespace MyKniga.Services
 
         public async Task<string> CreateBookAsync(BookCreateServiceModel serviceBook)
         {
+            if (!this.IsEntityStateValid(serviceBook))
+            {
+                return null;
+            }
+
             var dbBook = Mapper.Map<Book>(serviceBook);
 
             await this.Context.Books.AddAsync(dbBook);
