@@ -8,6 +8,7 @@ namespace MyKniga.Web.Controllers
     using Models;
     using Services.Interfaces;
     using Services.Models;
+    using Services.Models.Book;
 
     [Authorize]
     public class PurchaseController : Controller
@@ -23,7 +24,7 @@ namespace MyKniga.Web.Controllers
 
         public async Task<IActionResult> ConfirmPurchase(string bookId)
         {
-            var serviceBook = await this.booksService.GetBookByIdAsync(bookId);
+            var serviceBook = await this.booksService.GetBookByIdAsync<BookConfirmPurchaseServiceModel>(bookId);
 
             // TODO: Redirect To Error Page
             if (serviceBook == null)
@@ -31,7 +32,7 @@ namespace MyKniga.Web.Controllers
                 return this.RedirectToAction("Index", "Home");
             }
 
-            var book = Mapper.Map<BookDetailsViewModel>(serviceBook);
+            var book = Mapper.Map<BookConfirmPurchaseViewModel>(serviceBook);
 
             return this.View(book);
         }

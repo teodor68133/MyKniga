@@ -8,7 +8,7 @@ namespace MyKniga.Web.Controllers
     using Microsoft.AspNetCore.Mvc;
     using Models;
     using Services.Interfaces;
-    using Services.Models;
+    using Services.Models.Book;
 
     public class BooksController : Controller
     {
@@ -62,7 +62,7 @@ namespace MyKniga.Web.Controllers
                 return this.NotFound();
             }
             
-            var book = await this.booksService.GetBookByIdAsync(id);
+            var book = await this.booksService.GetBookByIdAsync<BookDetailsServiceModel>(id);
 
             if (book == null)
             {

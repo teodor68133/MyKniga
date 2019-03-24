@@ -8,7 +8,7 @@ namespace MyKniga.Services
     using Data;
     using Interfaces;
     using Microsoft.EntityFrameworkCore;
-    using Models;
+    using Models.Book;
     using MyKniga.Models;
 
     public class BooksService : BaseService, IBooksService
@@ -43,10 +43,11 @@ namespace MyKniga.Services
             return serviceBooks;
         }
 
-        public async Task<BookDetailsServiceModel> GetBookByIdAsync(string id)
+        public async Task<T> GetBookByIdAsync<T>(string id)
+            where T : BaseBookServiceModel
         {
             var serviceBook = await this.Context.Books
-                .ProjectTo<BookDetailsServiceModel>()
+                .ProjectTo<T>()
                 .SingleOrDefaultAsync(b => b.Id == id);
 
             return serviceBook;

@@ -1,13 +1,9 @@
-namespace MyKniga.Services.Models
+namespace MyKniga.Services.Models.Book
 {
     using System.Collections.Generic;
-    using Common.Mapping.Interfaces;
-    using MyKniga.Models;
 
-    public class BookDetailsServiceModel : IMapWith<Book>
+    public class BookDetailsServiceModel : BaseBookServiceModel
     {
-        public string Id { get; set; }
-
         public string Title { get; set; }
 
         public string Author { get; set; }

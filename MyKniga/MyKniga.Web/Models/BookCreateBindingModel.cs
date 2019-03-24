@@ -2,7 +2,7 @@ namespace MyKniga.Web.Models
 {
     using System.ComponentModel.DataAnnotations;
     using Common.Mapping.Interfaces;
-    using Services.Models;
+    using Services.Models.Book;
 
     public class BookCreateBindingModel : IMapWith<BookCreateServiceModel>
     {

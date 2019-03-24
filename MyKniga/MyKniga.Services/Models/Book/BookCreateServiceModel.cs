@@ -1,4 +1,4 @@
-namespace MyKniga.Services.Models
+namespace MyKniga.Services.Models.Book
 {
     using System.ComponentModel.DataAnnotations;
     using Common.Mapping.Interfaces;

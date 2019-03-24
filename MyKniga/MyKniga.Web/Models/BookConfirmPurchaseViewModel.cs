@@ -1,7 +1,7 @@
 namespace MyKniga.Web.Models
 {
     using Common.Mapping.Interfaces;
-    using Services.Models;
+    using Services.Models.Book;
 
     public class BookConfirmPurchaseViewModel : IMapWith<BookConfirmPurchaseServiceModel>
     {

@@ -2,7 +2,7 @@ namespace MyKniga.Web.Models
 {
     using System.Collections.Generic;
     using Common.Mapping.Interfaces;
-    using Services.Models;
+    using Services.Models.Book;
 
     public class BookDetailsViewModel : IMapWith<BookDetailsServiceModel>
     {
