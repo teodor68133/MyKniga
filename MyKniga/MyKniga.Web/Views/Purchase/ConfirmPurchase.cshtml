@@ -1,4 +1,9 @@
 @model BookConfirmPurchaseViewModel
+
+@{
+    ViewData["Title"] = "Buy " + Model.Title;
+}
+
 <div class="text-center mt-3 w-50 mx-auto">
     <h3>Confirm Purchase:</h3>
     <img class="book-thumbnail-img my-2" src="@Model.ImageUrl" alt="@Model.Title"/>
