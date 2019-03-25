@@ -34,6 +34,12 @@
                         <a class="nav-link" asp-controller="Tags" asp-action="Create">Create Tag</a>
                     </li>
                 }
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li>
+                        <a class="nav-link" asp-controller="Purchase" asp-action="My">My Books</a>
+                    </li>
+                }
             </ul>
 
             <div class="navbar-nav ml-auto">

@@ -1,6 +1,7 @@
 namespace MyKniga.Web.Controllers
 {
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
     using Microsoft.AspNetCore.Authorization;
@@ -56,6 +57,15 @@ namespace MyKniga.Web.Controllers
             }
 
             return this.RedirectToAction("Index", "Home");
+        }
+
+        public async Task<IActionResult> My()
+        {
+            var servicedBooks = await this.purchasesService.GetPurchasesForUser(this.User.Identity.Name);
+
+            var viewModel = servicedBooks.Select(Mapper.Map<PurchaseListingViewModel>);
+
+            return this.View(viewModel);
         }
     }
 }

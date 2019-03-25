@@ -1,7 +1,11 @@
 namespace MyKniga.Services
 {
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using Data;
     using Interfaces;
     using Microsoft.EntityFrameworkCore;
@@ -38,6 +42,17 @@ namespace MyKniga.Services
             await this.Context.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task<IEnumerable<PurchaseListingServiceModel>> GetPurchasesForUser(string userName)
+        {
+            var purchasedBooks = await this.Context.Purchases
+                .Where(p => p.User.UserName == userName)
+                .OrderByDescending(p => p.PurchaseDate)
+                .ProjectTo<PurchaseListingServiceModel>()
+                .ToArrayAsync();
+
+            return purchasedBooks;
         }
     }
 }

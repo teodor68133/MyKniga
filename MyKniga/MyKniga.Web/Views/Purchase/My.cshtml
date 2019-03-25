@@ -1,0 +1,31 @@
+@model IEnumerable<PurchaseListingViewModel>
+
+@{
+    ViewData["Title"] = "My Books";
+}
+
+<div class="w-75 mx-auto">
+    <h1 class="text-center my-3">My Books</h1>
+    <hr/>
+    @foreach (var purchase in Model)
+    {
+        <div class="row">
+            <div class="col-12 col-lg-3 text-center">
+                <img src="@purchase.Book.ImageUrl" class="book-listing-img" alt="@purchase.Book.Title"/>
+            </div>
+            <div class="col-12 col-lg-7">
+                <div class="mx-3">
+                    <h4 class="mt-2">@purchase.Book.Title</h4>
+                    <p class="text-secondary">@purchase.Book.Author</p>
+                    <p class="text-secondary">Purchased on @purchase.PurchaseDate.ToString("dddd, dd.MM.yyyy")</p>
+                </div>
+            </div>
+            <div class="col-12 col-lg-2 text-right">
+                <a class="btn btn-primary" asp-controller="Books" asp-action="Details" asp-route-id="@purchase.Book.Id">
+                    Details
+                </a>
+            </div>
+        </div>
+        <hr/>
+    }
+</div>
