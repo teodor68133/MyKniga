@@ -38,6 +38,8 @@
             services.AddDbContext<MyKnigaDbContext>(options =>
                 options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
 
+            services.Configure<CookieTempDataProviderOptions>(options => { options.Cookie.IsEssential = true; });
+
             services.AddIdentity<KnigaUser, IdentityRole>(options =>
                 {
                     options.Password.RequiredLength = 3;

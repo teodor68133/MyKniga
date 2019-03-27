@@ -74,6 +74,36 @@
     </div>
 </nav>
 
+@if (TempData.ContainsKey(GlobalConstants.TempDataSuccessMessageKey))
+{
+    <div class="alert alert-primary fade show mb-0" role="alert">
+        <div class="container d-flex flex-row">
+            <i class="fas fa-check-square fa-2x align-self-center"></i>
+            <p class="pl-3 my-1" style="font-size: large;">@TempData[GlobalConstants.TempDataSuccessMessageKey]</p>
+            <div class="ml-auto">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@if (TempData.ContainsKey(GlobalConstants.TempDataErrorMessageKey))
+{
+    <div class="alert alert-danger fade show mb-0" role="alert">
+        <div class="container d-flex flex-row">
+            <i class="fas fa-exclamation-triangle fa-2x align-self-center"></i>
+            <p class="pl-3 my-1" style="font-size: large;">@TempData[GlobalConstants.TempDataErrorMessageKey]</p>
+            <div class="ml-auto">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
 <partial name="_CookieConsentPartial"/>
 
 <main>

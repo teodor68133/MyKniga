@@ -10,7 +10,7 @@ namespace MyKniga.Web.Controllers
     using Services.Interfaces;
     using Services.Models.Book;
 
-    public class BooksController : Controller
+    public class BooksController : BaseController
     {
         private readonly IBooksService booksService;
         private readonly ITagsService tagsService;
@@ -33,6 +33,7 @@ namespace MyKniga.Web.Controllers
         {
             if (!this.ModelState.IsValid)
             {
+                this.ShowErrorMessage(NotificationMessages.BookCreateErrorMessage);
                 return this.View(model);
             }
 
@@ -40,6 +41,7 @@ namespace MyKniga.Web.Controllers
 
             this.booksService.CreateBookAsync(serviceBook);
 
+            this.ShowSuccessMessage(NotificationMessages.BookCreateSuccessMessage);
             return this.RedirectToAction("Index", "Home");
         }
 

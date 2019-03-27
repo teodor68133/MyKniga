@@ -4,6 +4,7 @@ namespace MyKniga.Web.Controllers
     using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
+    using Common;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Models;
@@ -12,7 +13,7 @@ namespace MyKniga.Web.Controllers
     using Services.Models.Book;
 
     [Authorize]
-    public class PurchaseController : Controller
+    public class PurchaseController : BaseController
     {
         private readonly IPurchasesService purchasesService;
         private readonly IBooksService booksService;
@@ -27,9 +28,9 @@ namespace MyKniga.Web.Controllers
         {
             var serviceBook = await this.booksService.GetBookByIdAsync<BookConfirmPurchaseServiceModel>(bookId);
 
-            // TODO: Redirect To Error Page
             if (serviceBook == null)
             {
+                this.ShowErrorMessage(NotificationMessages.PurchaseErrorMessage);
                 return this.RedirectToAction("Index", "Home");
             }
 
@@ -50,11 +51,13 @@ namespace MyKniga.Web.Controllers
 
             var isSuccess = await this.purchasesService.CreateAsync(purchase);
 
-            // TODO: Redirect To Error Page
             if (!isSuccess)
             {
+                this.ShowErrorMessage(NotificationMessages.PurchaseErrorMessage);
                 return this.RedirectToAction("Index", "Home");
             }
+
+            this.ShowSuccessMessage(NotificationMessages.PurchaseSuccessMessage);
 
             return this.RedirectToAction("Index", "Home");
         }

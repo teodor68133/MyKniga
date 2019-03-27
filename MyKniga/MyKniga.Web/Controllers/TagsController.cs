@@ -10,7 +10,7 @@ namespace MyKniga.Web.Controllers
     using Services.Models;
 
     [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
-    public class TagsController : Controller
+    public class TagsController : BaseController
     {
         private readonly ITagsService tagsService;
 
@@ -38,10 +38,11 @@ namespace MyKniga.Web.Controllers
 
             if (!isSuccess)
             {
-                // TODO: Add notification
+                this.ShowErrorMessage(NotificationMessages.TagCreateErrorMessage);
                 return this.View(model);
             }
 
+            this.ShowSuccessMessage(NotificationMessages.TagCreateSuccessMessage);
             return this.RedirectToAction("Index", "Home");
         }
     }
