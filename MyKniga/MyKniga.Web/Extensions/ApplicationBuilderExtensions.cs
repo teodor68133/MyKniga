@@ -15,6 +15,7 @@ namespace MyKniga.Web.Extensions
             InitializeDatabaseAsync(app).GetAwaiter().GetResult();
         }
 
+        // Migrate database and create administrator role
         private static async Task InitializeDatabaseAsync(IApplicationBuilder app)
         {
             using (var serviceScope = app.ApplicationServices.CreateScope())

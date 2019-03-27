@@ -1,6 +1,5 @@
 namespace MyKniga.Services
 {
-    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -27,6 +26,7 @@ namespace MyKniga.Services
 
             var user = await this.Context.Users.SingleOrDefaultAsync(u => u.UserName == model.UserName);
 
+            // Verify that the user exists, the book exists, and that the book has not already been purchased by the user
             if (user == null ||
                 !await this.Context.Books.AnyAsync(b => b.Id == model.BookId) ||
                 await this.Context.Purchases.AnyAsync(bt => bt.BookId == model.BookId && bt.UserId == user.Id))

@@ -38,6 +38,7 @@
             services.AddDbContext<MyKnigaDbContext>(options =>
                 options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
 
+            // Allow temp data cookies to be set even if the user has not yet given consent for cookies
             services.Configure<CookieTempDataProviderOptions>(options => { options.Cookie.IsEssential = true; });
 
             services.AddIdentity<KnigaUser, IdentityRole>(options =>
@@ -53,6 +54,8 @@
                 .AddEntityFrameworkStores<MyKnigaDbContext>()
                 .AddDefaultTokenProviders();
 
+            // Automatically add the AutoValidateAntiforgeryTokenAttribute so that every form is protected
+            // from CSRF attacks by default
             services.AddMvc(options => { options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()); })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
@@ -60,6 +63,7 @@
 
             services.AddResponseCompression(opt => opt.EnableForHttps = true);
 
+            // Register services
             services.AddScoped<IBooksService, BooksService>();
             services.AddScoped<ITagsService, TagsService>();
             services.AddScoped<IPurchasesService, PurchasesService>();

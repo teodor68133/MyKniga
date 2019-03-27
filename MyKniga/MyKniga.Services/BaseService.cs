@@ -13,6 +13,7 @@ namespace MyKniga.Services
             this.Context = context;
         }
 
+        // Validate model properties
         protected bool IsEntityStateValid(object model)
         {
             var validationContext = new ValidationContext(model);

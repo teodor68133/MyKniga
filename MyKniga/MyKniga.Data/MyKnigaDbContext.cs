@@ -18,6 +18,7 @@ namespace MyKniga.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            // Create composite keys for BookTag and Purchase entities
             builder.Entity<BookTag>().HasKey(bt => new {bt.BookId, bt.TagId});
             builder.Entity<Purchase>().HasKey(p => new {p.BookId, p.UserId});
             base.OnModelCreating(builder);

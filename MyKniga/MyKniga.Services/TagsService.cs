@@ -25,6 +25,7 @@ namespace MyKniga.Services
 
             var nameToCheck = model.Name.Trim().ToLower();
 
+            // Verify that a tag with the provided name does not already exist
             if (await this.Context.Tags.AnyAsync(t => t.Name.ToLower() == nameToCheck))
             {
                 return false;

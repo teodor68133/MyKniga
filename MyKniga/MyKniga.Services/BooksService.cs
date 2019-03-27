@@ -10,7 +10,6 @@ namespace MyKniga.Services
     using Microsoft.EntityFrameworkCore;
     using Models.Book;
     using MyKniga.Models;
-    using Remotion.Linq.Clauses;
 
     public class BooksService : BaseService, IBooksService
     {
@@ -57,6 +56,7 @@ namespace MyKniga.Services
 
         public async Task<bool> AddTagToBookAsync(string bookId, string tagId)
         {
+            // Verify that the tag exists, the book exists, and that the tag has not already been added to the book
             if (!await this.Context.Tags.AnyAsync(t => t.Id == tagId) ||
                 !await this.Context.Books.AnyAsync(b => b.Id == bookId) ||
                 await this.Context.BookTags.AnyAsync(bt => bt.BookId == bookId && bt.TagId == tagId))
