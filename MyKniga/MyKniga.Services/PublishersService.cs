@@ -49,8 +49,31 @@ namespace MyKniga.Services
                 .OrderBy(p => p.Name)
                 .ProjectTo<PublisherListingServiceModel>()
                 .ToArrayAsync();
-            
+
             return publishers;
+        }
+
+        public async Task<bool> AssignUserToPublisherAsync(string userId, string publisherId)
+        {
+            if (userId == null || publisherId == null)
+            {
+                return false;
+            }
+
+            var user = await this.Context.Users.SingleOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null || !await this.Context.Publishers.AnyAsync(p => p.Id == publisherId))
+            {
+                return false;
+            }
+
+            user.PublisherId = publisherId;
+
+            this.Context.Users.Update(user);
+
+            await this.Context.SaveChangesAsync();
+
+            return true;
         }
     }
 }
