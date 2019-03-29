@@ -14,11 +14,13 @@ namespace MyKniga.Web.Controllers
     {
         private readonly IBooksService booksService;
         private readonly ITagsService tagsService;
+        private readonly IUsersService usersService;
 
-        public BooksController(IBooksService booksService, ITagsService tagsService)
+        public BooksController(IBooksService booksService, ITagsService tagsService, IUsersService usersService)
         {
             this.booksService = booksService;
             this.tagsService = tagsService;
+            this.usersService = usersService;
         }
 
         [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
@@ -39,7 +41,15 @@ namespace MyKniga.Web.Controllers
 
             var serviceBook = Mapper.Map<BookCreateServiceModel>(model);
 
-            this.booksService.CreateBookAsync(serviceBook);
+            serviceBook.PublisherId = publisherId;
+
+            var bookId = await this.booksService.CreateBookAsync(serviceBook);
+
+            if (bookId == null)
+            {
+                this.ShowErrorMessage(NotificationMessages.BookCreateErrorMessage);
+                return this.View(model);
+            }
 
             this.ShowSuccessMessage(NotificationMessages.BookCreateSuccessMessage);
             return this.RedirectToAction("Index", "Home");

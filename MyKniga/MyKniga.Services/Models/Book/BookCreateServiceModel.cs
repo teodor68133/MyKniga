@@ -42,5 +42,8 @@ namespace MyKniga.Services.Models.Book
         [MaxLength(13)]
         [RegularExpression(@"^\d{13}$")]
         public string Isbn { get; set; }
+        
+        [Required]
+        public string PublisherId { get; set; }
     }
 }
