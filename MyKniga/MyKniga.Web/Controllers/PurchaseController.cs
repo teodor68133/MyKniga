@@ -64,7 +64,7 @@ namespace MyKniga.Web.Controllers
 
         public async Task<IActionResult> My()
         {
-            var servicedBooks = await this.purchasesService.GetPurchasesForUser(this.User.Identity.Name);
+            var servicedBooks = await this.purchasesService.GetPurchasesForUserAsync(this.User.Identity.Name);
 
             var viewModel = servicedBooks.Select(Mapper.Map<PurchaseListingViewModel>);
 

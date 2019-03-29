@@ -44,7 +44,7 @@ namespace MyKniga.Services
             return true;
         }
 
-        public async Task<IEnumerable<PurchaseListingServiceModel>> GetPurchasesForUser(string userName)
+        public async Task<IEnumerable<PurchaseListingServiceModel>> GetPurchasesForUserAsync(string userName)
         {
             var purchasedBooks = await this.Context.Purchases
                 .Where(p => p.User.UserName == userName)

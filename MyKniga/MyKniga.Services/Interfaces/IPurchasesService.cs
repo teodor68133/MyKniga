@@ -7,6 +7,6 @@ namespace MyKniga.Services.Interfaces
     public interface IPurchasesService
     {
         Task<bool> CreateAsync(PurchaseCreateServiceModel model);
-        Task<IEnumerable<PurchaseListingServiceModel>> GetPurchasesForUser(string userName);
+        Task<IEnumerable<PurchaseListingServiceModel>> GetPurchasesForUserAsync(string userName);
     }
 }
