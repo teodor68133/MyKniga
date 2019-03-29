@@ -22,6 +22,8 @@ namespace MyKniga.Services.Models.Book
 
         public string Isbn { get; set; }
 
+        public string PublisherId { get; set; }
+
         public IEnumerable<BookTagDisplayServiceModel> BookTags { get; set; }
     }
 }

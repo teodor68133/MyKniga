@@ -23,20 +23,28 @@ namespace MyKniga.Web.Controllers
             this.usersService = usersService;
         }
 
-        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        [Authorize(Policy = GlobalConstants.AdministratorOrPublisherPolicyName)]
         public IActionResult Create()
         {
             return this.View();
         }
 
         [HttpPost]
-        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
-        public IActionResult Create(BookCreateBindingModel model)
+        [Authorize(Policy = GlobalConstants.AdministratorOrPublisherPolicyName)]
+        public async Task<IActionResult> Create(BookCreateBindingModel model)
         {
             if (!this.ModelState.IsValid)
             {
                 this.ShowErrorMessage(NotificationMessages.BookCreateErrorMessage);
                 return this.View(model);
+            }
+
+            var publisherId = await this.usersService.GetPublisherIdByUserNameAsync(this.User.Identity.Name);
+
+            if (publisherId == null)
+            {
+                this.ShowErrorMessage(NotificationMessages.BookCreateErrorMessage);
+                return this.RedirectToAction("Index", "Home");
             }
 
             var serviceBook = Mapper.Map<BookCreateServiceModel>(model);
@@ -73,7 +81,7 @@ namespace MyKniga.Web.Controllers
             {
                 return this.NotFound();
             }
-            
+
             var book = await this.booksService.GetBookByIdAsync<BookDetailsServiceModel>(id);
 
             if (book == null)
@@ -82,20 +90,33 @@ namespace MyKniga.Web.Controllers
             }
 
             var viewBook = Mapper.Map<BookDetailsViewModel>(book);
-            var allTags = (await this.tagsService.GetAllTagsAsync())
-                .Select(Mapper.Map<TagDisplayViewModel>)
-                .ToArray();
 
-            viewBook.AllTags = allTags;
+            viewBook.CanEdit = await this.UserCanEditBookAsync(book);
+
+            if (viewBook.CanEdit)
+            {
+                var allTags = (await this.tagsService.GetAllTagsAsync())
+                    .Select(Mapper.Map<TagDisplayViewModel>)
+                    .ToArray();
+
+                viewBook.AllTags = allTags;
+            }
 
             return this.View(viewBook);
         }
 
         [HttpPost]
-        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        [Authorize(Policy = GlobalConstants.AdministratorOrPublisherPolicyName)]
         public async Task<IActionResult> AddTagToBook(string bookId, string tagId)
         {
             if (bookId == null || tagId == null)
+            {
+                return this.Ok(new {success = false});
+            }
+
+            var book = await this.booksService.GetBookByIdAsync<BookDetailsServiceModel>(bookId);
+
+            if (book == null || !await this.UserCanEditBookAsync(book))
             {
                 return this.Ok(new {success = false});
             }
@@ -106,7 +127,7 @@ namespace MyKniga.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        [Authorize(Policy = GlobalConstants.AdministratorOrPublisherPolicyName)]
         public async Task<IActionResult> RemoveTagFromBook(string bookId, string tagId)
         {
             if (bookId == null || tagId == null)
@@ -114,9 +135,33 @@ namespace MyKniga.Web.Controllers
                 return this.Ok(new {success = false});
             }
 
+            var book = await this.booksService.GetBookByIdAsync<BookDetailsServiceModel>(bookId);
+
+            if (book == null || !await this.UserCanEditBookAsync(book))
+            {
+                return this.Ok(new {success = false});
+            }
+
             await this.booksService.RemoveTagFromBookAsync(bookId, tagId);
 
             return this.Ok(new {success = true});
+        }
+
+        private async Task<bool> UserCanEditBookAsync(BookDetailsServiceModel model)
+        {
+            if (!this.User.Identity.IsAuthenticated)
+            {
+                return false;
+            }
+
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                return true;
+            }
+
+            var publisherId = await this.usersService.GetPublisherIdByUserNameAsync(this.User.Identity.Name);
+
+            return publisherId == model.PublisherId;
         }
     }
 }
