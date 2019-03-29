@@ -1,4 +1,4 @@
-namespace MyKniga.Web
+﻿namespace MyKniga.Web
 {
     using AutoMapper;
     using Common;
@@ -75,6 +75,8 @@ namespace MyKniga.Web
             services.AddScoped<IBooksService, BooksService>();
             services.AddScoped<ITagsService, TagsService>();
             services.AddScoped<IPurchasesService, PurchasesService>();
+            services.AddScoped<IPublishersService, PublishersService>();
+            services.AddScoped<IUsersService, UsersService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
