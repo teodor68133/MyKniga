@@ -45,5 +45,39 @@ namespace MyKniga.Web.Controllers
 
             return this.View(model);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AssignPublisher(string userId, string publisherId)
+        {
+            if (userId == null || publisherId == null)
+            {
+                this.ShowErrorMessage(NotificationMessages.PublisherAssignErrorMessage);
+                return this.RedirectToAction("Index");
+            }
+
+            var user = await this.userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                this.ShowErrorMessage(NotificationMessages.PublisherAssignErrorMessage);
+                return this.RedirectToAction("Index");
+            }
+
+            var success = await this.publishersService.AssignUserToPublisherAsync(userId, publisherId);
+
+            if (!success)
+            {
+                this.ShowErrorMessage(NotificationMessages.PublisherAssignErrorMessage);
+                return this.RedirectToAction("Index");
+            }
+
+            if (!await this.userManager.IsInRoleAsync(user, GlobalConstants.PublisherRoleName))
+            {
+                await this.userManager.AddToRoleAsync(user, GlobalConstants.PublisherRoleName);
+            }
+
+            this.ShowSuccessMessage(NotificationMessages.PublisherAssignSuccessMessage);
+            return this.RedirectToAction("Index");
+        }
     }
 }

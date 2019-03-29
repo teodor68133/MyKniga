@@ -10,5 +10,7 @@ namespace MyKniga.Common
         public const string PurchaseSuccessMessage = "Successfully purchased book";
         public const string PublisherCreateErrorMessage = "An error occurred while creating publisher";
         public const string PublisherCreateSuccessMessage = "Successfully added new publisher";
+        public const string PublisherAssignErrorMessage = "An error occurred while assigning publisher";
+        public const string PublisherAssignSuccessMessage = "Successfully assigned publisher";
     }
 }
