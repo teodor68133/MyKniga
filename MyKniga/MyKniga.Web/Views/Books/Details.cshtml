@@ -137,8 +137,8 @@
                         }
 
                         $('#tagList').append(`
-                    <span class="badge badge-dark badge-pill bg-darker p-2" data-tagid="${selectedValue}">
-                        ${selectedText}
+                    <span class="badge badge-dark badge-pill bg-darker p-2" data-tagid="${escapeHtml(selectedValue)}">
+                        ${escapeHtml(selectedText)}
                         <button type="button" class="btn btn-link p-0 m-0 text-light font-weight-bold" onclick="removeTag(this)">
                             <i class="fas fa-times-circle"></i>
                         </button>
