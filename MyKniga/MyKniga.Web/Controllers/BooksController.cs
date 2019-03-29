@@ -52,7 +52,7 @@ namespace MyKniga.Web.Controllers
             }
 
             this.ShowSuccessMessage(NotificationMessages.BookCreateSuccessMessage);
-            return this.RedirectToAction("Index", "Home");
+            return this.RedirectToAction("Details", "Books", new {id = bookId});
         }
 
         public IActionResult Index()
