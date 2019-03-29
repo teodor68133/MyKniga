@@ -6,5 +6,8 @@ namespace MyKniga.Models
     public class KnigaUser : IdentityUser
     {
         public ICollection<Purchase> Purchases { get; set; }
+
+        public Publisher Publisher { get; set; }
+        public string PublisherId { get; set; }
     }
 }

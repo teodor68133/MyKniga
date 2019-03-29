@@ -15,6 +15,7 @@ namespace MyKniga.Data
         public DbSet<Tag> Tags { get; set; }
         public DbSet<BookTag> BookTags { get; set; }
         public DbSet<Purchase> Purchases { get; set; }
+        public DbSet<Publisher> Publishers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
