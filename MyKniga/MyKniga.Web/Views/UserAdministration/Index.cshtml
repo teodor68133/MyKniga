@@ -1,0 +1,24 @@
+@model UserAdministrationIndexViewModel
+
+@{
+    ViewData["Title"] = "Create book";
+}
+
+<h1 class="text-center">Users</h1>
+<table class="table table-hover">
+    <thead>
+    <tr class="font-weight-bold text-center">
+        <th>Username</th>
+        <th>Publisher</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var user in Model.Users)
+    {
+        <tr>
+            <td>@user.UserName</td>
+            <td>@user.PublisherName</td>
+        </tr>
+    }
+    </tbody>
+</table>
