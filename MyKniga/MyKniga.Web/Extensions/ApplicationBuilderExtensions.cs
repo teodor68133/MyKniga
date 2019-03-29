@@ -6,7 +6,7 @@ namespace MyKniga.Web.Extensions
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
-    using MyKniga.Data;
+    using Data;
 
     public static class ApplicationBuilderExtensions
     {
@@ -29,6 +29,11 @@ namespace MyKniga.Web.Extensions
                 if (!await roleManager.RoleExistsAsync(GlobalConstants.AdministratorRoleName))
                 {
                     await roleManager.CreateAsync(new IdentityRole(GlobalConstants.AdministratorRoleName));
+                }
+
+                if (!await roleManager.RoleExistsAsync(GlobalConstants.PublisherRoleName))
+                {
+                    await roleManager.CreateAsync(new IdentityRole(GlobalConstants.PublisherRoleName));
                 }
             }
         }

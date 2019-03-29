@@ -1,6 +1,7 @@
-﻿namespace MyKniga.Web
+namespace MyKniga.Web
 {
     using AutoMapper;
+    using Common;
     using Common.Mapping;
     using Extensions;
     using Microsoft.AspNetCore.Builder;
@@ -13,7 +14,7 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using MyKniga.Data;
+    using Data;
     using MyKniga.Models;
     using Services;
     using Services.Interfaces;
@@ -58,6 +59,13 @@
             // from CSRF attacks by default
             services.AddMvc(options => { options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()); })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(GlobalConstants.AdministratorOrPublisherPolicyName,
+                    policy => policy.RequireRole(
+                        GlobalConstants.PublisherRoleName, GlobalConstants.AdministratorRoleName));
+            });
 
             services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 

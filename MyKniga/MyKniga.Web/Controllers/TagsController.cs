@@ -9,7 +9,7 @@ namespace MyKniga.Web.Controllers
     using Services.Interfaces;
     using Services.Models;
 
-    [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+    [Authorize(Policy = GlobalConstants.AdministratorOrPublisherPolicyName)]
     public class TagsController : BaseController
     {
         private readonly ITagsService tagsService;
