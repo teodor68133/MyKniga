@@ -25,7 +25,7 @@
                     <a class="nav-link" asp-controller="Books" asp-action="Index">Books</a>
                 </li>
 
-                @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+                @if (User.IsInRole(GlobalConstants.PublisherRoleName))
                 {
                     <li class="nav-item">
                         <a class="nav-link" asp-controller="Books" asp-action="Create">Create Book</a>
@@ -34,6 +34,14 @@
                         <a class="nav-link" asp-controller="Tags" asp-action="Create">Create Tag</a>
                     </li>
                 }
+                
+                @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Publishers" asp-action="Create">Create Publisher</a>
+                    </li>
+                }
+
                 @if (User.Identity.IsAuthenticated)
                 {
                     <li>
