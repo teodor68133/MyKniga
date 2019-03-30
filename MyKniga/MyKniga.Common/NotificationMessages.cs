@@ -12,5 +12,7 @@ namespace MyKniga.Common
         public const string PublisherCreateSuccessMessage = "Successfully added new publisher";
         public const string PublisherAssignErrorMessage = "An error occurred while assigning publisher";
         public const string PublisherAssignSuccessMessage = "Successfully assigned publisher";
+        public const string PublisherRemoveFromUserErrorMessage = "An error occurred while removing publisher from user";
+        public const string PublisherRemoveFromUserSuccessMessage = "Successfully removed publisher from user";
     }
 }
