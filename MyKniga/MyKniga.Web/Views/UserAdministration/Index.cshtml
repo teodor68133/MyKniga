@@ -27,11 +27,19 @@
                 }
                 else
                 {
-                    @user.PublisherName
-                    <button class="btn btn-danger" data-toggle="modal"
-                            data-target="#removeModal" data-user-id="@user.Id">
-                        <i class="fas fa-user-minus"></i>
-                    </button>
+                    <div class="d-flex flex-row justify-content-between">
+                        @user.PublisherName
+                        <div>
+                            <button class="btn btn-primary" data-toggle="modal"
+                                    data-target="#assignModal" data-user-id="@user.Id">
+                                <i class="fas fa-user-edit"></i>
+                            </button>
+                            <button class="btn btn-danger" data-toggle="modal"
+                                    data-target="#removeModal" data-user-id="@user.Id">
+                                <i class="fas fa-user-minus"></i>
+                            </button>
+                        </div>
+                    </div>
                 }
 
             </td>
