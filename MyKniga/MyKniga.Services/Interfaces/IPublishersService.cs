@@ -9,5 +9,6 @@ namespace MyKniga.Services.Interfaces
         Task<bool> CreatePublisherAsync(PublisherCreateServiceModel model);
         Task<IEnumerable<PublisherListingServiceModel>> GetAllPublishersAsync();
         Task<bool> AssignUserToPublisherAsync(string userId, string publisherId);
+        Task<bool> RemoveUserFromPublisherAsync(string userId);
     }
 }

@@ -75,5 +75,28 @@ namespace MyKniga.Services
 
             return true;
         }
+
+        public async Task<bool> RemoveUserFromPublisherAsync(string userId)
+        {
+            if (userId == null)
+            {
+                return false;
+            }
+
+            var user = await this.Context.Users.SingleOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            user.PublisherId = null;
+
+            this.Context.Users.Update(user);
+
+            await this.Context.SaveChangesAsync();
+
+            return true;
+        }
     }
 }
