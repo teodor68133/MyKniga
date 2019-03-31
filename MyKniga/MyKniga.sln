@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyKniga.Common", "MyKniga.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyKniga.Services", "MyKniga.Services\MyKniga.Services.csproj", "{C13D8847-A32F-427B-A845-9ADC3A6B2907}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyKniga.Tests", "MyKniga.Tests\MyKniga.Tests.csproj", "{9AA44B76-54C6-49F1-BFB6-F2997DF24D93}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{C13D8847-A32F-427B-A845-9ADC3A6B2907}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C13D8847-A32F-427B-A845-9ADC3A6B2907}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C13D8847-A32F-427B-A845-9ADC3A6B2907}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AA44B76-54C6-49F1-BFB6-F2997DF24D93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AA44B76-54C6-49F1-BFB6-F2997DF24D93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AA44B76-54C6-49F1-BFB6-F2997DF24D93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AA44B76-54C6-49F1-BFB6-F2997DF24D93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

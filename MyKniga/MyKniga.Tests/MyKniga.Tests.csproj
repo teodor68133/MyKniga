@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="8.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.2.3" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+        <PackageReference Include="xunit" Version="2.4.0" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\MyKniga.Common\MyKniga.Common.csproj" />
+      <ProjectReference Include="..\MyKniga.Data\MyKniga.Data.csproj" />
+      <ProjectReference Include="..\MyKniga.Services\MyKniga.Services.csproj" />
+    </ItemGroup>
+
+</Project>
