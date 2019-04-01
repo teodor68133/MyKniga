@@ -8,5 +8,6 @@ namespace MyKniga.Services.Interfaces
     {
         Task<bool> CreateAsync(TagCreateServiceModel model);
         Task<IEnumerable<TagDisplayServiceModel>> GetAllTagsAsync();
+        Task<bool> DeleteTagAsync(string tagId);
     }
 }

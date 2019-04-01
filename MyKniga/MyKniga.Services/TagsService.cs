@@ -15,7 +15,7 @@ namespace MyKniga.Services
         public TagsService(MyKnigaDbContext context) : base(context)
         {
         }
-        
+
         public async Task<bool> CreateAsync(TagCreateServiceModel model)
         {
             if (!this.IsEntityStateValid(model))
@@ -33,7 +33,7 @@ namespace MyKniga.Services
 
             var tagDbModel = new Tag
             {
-                Name = model.Name.Trim()
+                Name = model.Name.Trim().ToLower()
             };
 
             await this.Context.Tags.AddAsync(tagDbModel);
@@ -42,7 +42,7 @@ namespace MyKniga.Services
 
             return true;
         }
-        
+
         public async Task<IEnumerable<TagDisplayServiceModel>> GetAllTagsAsync()
         {
             var allTags = await this.Context.Tags
@@ -51,6 +51,27 @@ namespace MyKniga.Services
                 .ToArrayAsync();
 
             return allTags;
+        }
+
+        public async Task<bool> DeleteTagAsync(string tagId)
+        {
+            if (tagId == null)
+            {
+                return false;
+            }
+
+            var tag = await this.Context.Tags.SingleOrDefaultAsync(t => t.Id == tagId);
+
+            if (tag == null)
+            {
+                return false;
+            }
+
+            this.Context.Tags.Remove(tag);
+
+            await this.Context.SaveChangesAsync();
+
+            return true;
         }
     }
 }
