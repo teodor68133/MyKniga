@@ -15,12 +15,15 @@ namespace MyKniga.Web.Controllers
         private readonly IBooksService booksService;
         private readonly ITagsService tagsService;
         private readonly IUsersService usersService;
+        private readonly IPurchasesService purchasesService;
 
-        public BooksController(IBooksService booksService, ITagsService tagsService, IUsersService usersService)
+        public BooksController(IBooksService booksService, ITagsService tagsService, IUsersService usersService,
+            IPurchasesService purchasesService)
         {
             this.booksService = booksService;
             this.tagsService = tagsService;
             this.usersService = usersService;
+            this.purchasesService = purchasesService;
         }
 
         [Authorize(Policy = GlobalConstants.AdministratorOrPublisherPolicyName)]
@@ -92,6 +95,8 @@ namespace MyKniga.Web.Controllers
             var viewBook = Mapper.Map<BookDetailsViewModel>(book);
 
             viewBook.CanEdit = await this.UserCanEditBookAsync(book);
+
+            viewBook.HasPurchased = await this.UserHasPurchasedBookAsync(book);
 
             if (viewBook.CanEdit)
             {
@@ -192,6 +197,16 @@ namespace MyKniga.Web.Controllers
             var publisherId = await this.usersService.GetPublisherIdByUserNameAsync(this.User.Identity.Name);
 
             return publisherId == model.PublisherId;
+        }
+
+        private async Task<bool> UserHasPurchasedBookAsync(BookDetailsServiceModel model)
+        {
+            if (!this.User.Identity.IsAuthenticated)
+            {
+                return false;
+            }
+
+            return await this.purchasesService.UserHasPurchasedBookAsync(model.Id, this.User.Identity.Name);
         }
     }
 }

@@ -27,10 +27,20 @@
         <div class="d-flex flex-row justify-content-between">
             <h2 class="text-primary d-inline-block">€@Model.Price</h2>
             <div>
-                <a class="btn btn-primary" asp-controller="Purchase" asp-action="ConfirmPurchase" asp-route-bookId="@Model.Id">
-                    <i class="fas fa-cart-plus"></i>
-                    Purchase book
-                </a>
+                @if (Model.HasPurchased)
+                {
+                    <a class="btn btn-info" href="#">
+                        <i class="fas fa-book-open"></i>
+                        View book
+                    </a>
+                }
+                else
+                {
+                    <a class="btn btn-primary" asp-controller="Purchase" asp-action="ConfirmPurchase" asp-route-bookId="@Model.Id">
+                        <i class="fas fa-cart-plus"></i>
+                        Purchase book
+                    </a>
+                }
             </div>
         </div>
     </div>

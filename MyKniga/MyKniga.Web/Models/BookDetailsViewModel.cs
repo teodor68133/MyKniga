@@ -28,6 +28,8 @@ namespace MyKniga.Web.Models
 
         public bool CanEdit { get; set; }
 
+        public bool HasPurchased { get; set; }
+
         public IEnumerable<BookTagDisplayViewModel> BookTags { get; set; }
 
         public IEnumerable<TagDisplayViewModel> AllTags { get; set; }
