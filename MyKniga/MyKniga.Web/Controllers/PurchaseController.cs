@@ -26,12 +26,26 @@ namespace MyKniga.Web.Controllers
 
         public async Task<IActionResult> ConfirmPurchase(string bookId)
         {
+            if (bookId == null)
+            {
+                this.ShowErrorMessage(NotificationMessages.PurchaseErrorMessage);
+                return this.RedirectToAction("Index", "Home");
+            }
+
             var serviceBook = await this.booksService.GetBookByIdAsync<BookConfirmPurchaseServiceModel>(bookId);
+
 
             if (serviceBook == null)
             {
                 this.ShowErrorMessage(NotificationMessages.PurchaseErrorMessage);
                 return this.RedirectToAction("Index", "Home");
+            }
+
+            var isPurchased = await this.purchasesService.UserHasPurchasedBookAsync(bookId, this.User.Identity.Name);
+
+            if (isPurchased)
+            {
+                return this.RedirectToAction("Details", "Books", new {id = bookId});
             }
 
             var book = Mapper.Map<BookConfirmPurchaseViewModel>(serviceBook);
@@ -42,6 +56,19 @@ namespace MyKniga.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> PurchaseBook(string bookId)
         {
+            if (bookId == null)
+            {
+                this.ShowErrorMessage(NotificationMessages.PurchaseErrorMessage);
+                return this.RedirectToAction("Index", "Home");
+            }
+
+            var isPurchased = await this.purchasesService.UserHasPurchasedBookAsync(bookId, this.User.Identity.Name);
+
+            if (isPurchased)
+            {
+                return this.RedirectToAction("Details", "Books", new {id = bookId});
+            }
+
             var purchase = new PurchaseCreateServiceModel
             {
                 BookId = bookId,
