@@ -147,6 +147,36 @@ namespace MyKniga.Web.Controllers
             return this.Ok(new {success = true});
         }
 
+        [HttpPost]
+        [Authorize(Policy = GlobalConstants.AdministratorOrPublisherPolicyName)]
+        public async Task<IActionResult> DeleteBook(string bookId)
+        {
+            if (bookId == null)
+            {
+                this.ShowErrorMessage(NotificationMessages.BookDeleteErrorMessage);
+                return this.RedirectToAction("Index");
+            }
+
+            var book = await this.booksService.GetBookByIdAsync<BookDetailsServiceModel>(bookId);
+
+            if (book == null || !await this.UserCanEditBookAsync(book))
+            {
+                this.ShowErrorMessage(NotificationMessages.BookDeleteErrorMessage);
+                return this.RedirectToAction("Index");
+            }
+
+            var success = await this.booksService.DeleteBookAsync(bookId);
+
+            if (!success)
+            {
+                this.ShowErrorMessage(NotificationMessages.BookDeleteErrorMessage);
+                return this.RedirectToAction("Index");
+            }
+
+            this.ShowSuccessMessage(NotificationMessages.BookDeleteSuccessMessage);
+            return this.RedirectToAction("Index");
+        }
+
         private async Task<bool> UserCanEditBookAsync(BookDetailsServiceModel model)
         {
             if (!this.User.Identity.IsAuthenticated)
