@@ -7,7 +7,7 @@ namespace MyKniga.Services.Interfaces
     public interface ITagsService
     {
         Task<bool> CreateAsync(TagCreateServiceModel model);
-        Task<IEnumerable<TagDisplayServiceModel>> GetAllTagsAsync();
+        Task<IEnumerable<TagDisplayServiceModel>> GetAllTagsAsync(string searchQuery = null);
         Task<bool> DeleteTagAsync(string tagId);
     }
 }

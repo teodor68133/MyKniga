@@ -43,14 +43,20 @@ namespace MyKniga.Services
             return true;
         }
 
-        public async Task<IEnumerable<TagDisplayServiceModel>> GetAllTagsAsync()
+        public async Task<IEnumerable<TagDisplayServiceModel>> GetAllTagsAsync(string searchQuery = null)
         {
-            var allTags = await this.Context.Tags
-                .OrderBy(t => t.Name)
+            var allTags = this.Context.Tags.AsQueryable();
+
+            if (searchQuery != null)
+            {
+                allTags = allTags.Where(t => t.Name.Contains(searchQuery));
+            }
+
+            var selectedTags = await allTags.OrderBy(t => t.Name)
                 .ProjectTo<TagDisplayServiceModel>()
                 .ToArrayAsync();
 
-            return allTags;
+            return selectedTags;
         }
 
         public async Task<bool> DeleteTagAsync(string tagId)
