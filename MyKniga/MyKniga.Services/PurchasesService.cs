@@ -54,5 +54,18 @@ namespace MyKniga.Services
 
             return purchasedBooks;
         }
+
+        public async Task<bool> UserHasPurchasedBookAsync(string bookId, string userName)
+        {
+            if (userName == null || bookId == null)
+            {
+                return false;
+            }
+
+            var isPurchased = await this.Context.Purchases.AnyAsync(p =>
+                p.BookId == bookId && p.User.UserName == userName);
+
+            return isPurchased;
+        }
     }
 }
