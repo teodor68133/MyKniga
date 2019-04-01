@@ -98,5 +98,26 @@ namespace MyKniga.Services
 
             return true;
         }
+
+        public async Task<bool> DeletePublisherAsync(string publisherId)
+        {
+            if (publisherId == null)
+            {
+                return false;
+            }
+
+            var publisher = await this.Context.Publishers.SingleOrDefaultAsync(p => p.Id == publisherId);
+
+            if (publisher == null)
+            {
+                return false;
+            }
+
+            this.Context.Publishers.Remove(publisher);
+
+            await this.Context.SaveChangesAsync();
+
+            return true;
+        }
     }
 }
