@@ -16,5 +16,7 @@ namespace MyKniga.Common
         public const string PublisherRemoveFromUserSuccessMessage = "Successfully removed publisher from user";
         public const string BookDeleteErrorMessage = "An error occured while deleting book";
         public const string BookDeleteSuccessMessage = "Successfully deleted book";
+        public const string UserDeleteErrorMessage = "An error occured while deleting user";
+        public const string UserDeleteSuccessMessage = "Successfully deleted user";
     }
 }

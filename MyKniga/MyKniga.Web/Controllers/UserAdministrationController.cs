@@ -95,7 +95,7 @@ namespace MyKniga.Web.Controllers
                 this.ShowErrorMessage(NotificationMessages.PublisherRemoveFromUserErrorMessage);
                 return this.RedirectToAction("Index");
             }
-            
+
             var success = await this.publishersService.RemoveUserFromPublisherAsync(userId);
 
             if (!success)
@@ -110,6 +110,34 @@ namespace MyKniga.Web.Controllers
             }
 
             this.ShowSuccessMessage(NotificationMessages.PublisherRemoveFromUserSuccessMessage);
+            return this.RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> DeleteUser(string userId)
+        {
+            if (userId == null)
+            {
+                this.ShowErrorMessage(NotificationMessages.UserDeleteErrorMessage);
+                return this.RedirectToAction("Index");
+            }
+
+            var user = await this.userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                this.ShowErrorMessage(NotificationMessages.UserDeleteErrorMessage);
+                return this.RedirectToAction("Index");
+            }
+
+            var result = await this.userManager.DeleteAsync(user);
+
+            if (!result.Succeeded)
+            {
+                this.ShowErrorMessage(NotificationMessages.UserDeleteErrorMessage);
+                return this.RedirectToAction("Index");
+            }
+
+            this.ShowSuccessMessage(NotificationMessages.UserDeleteSuccessMessage);
             return this.RedirectToAction("Index");
         }
     }
