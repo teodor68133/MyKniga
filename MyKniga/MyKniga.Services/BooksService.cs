@@ -60,12 +60,12 @@ namespace MyKniga.Services
         {
             var allBooks = this.Context.Books.AsQueryable();
 
-            if (model.TagId != null)
+            if (!string.IsNullOrWhiteSpace(model.TagId))
             {
                 allBooks = allBooks.Where(b => b.BookTags.Any(t => t.TagId == model.TagId));
             }
 
-            if (model.PublisherId != null)
+            if (!string.IsNullOrWhiteSpace(model.PublisherId))
             {
                 allBooks = allBooks.Where(b => b.PublisherId == model.PublisherId);
             }
