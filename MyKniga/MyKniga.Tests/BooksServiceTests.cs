@@ -80,8 +80,7 @@ namespace MyKniga.Tests
             var expectedResult = new[] {"Book1", "Book2"};
             var context = this.NewInMemoryDatabase();
 
-            await context.Books.AddRangeAsync(new[]
-            {
+            await context.Books.AddRangeAsync(
                 new Book
                 {
                     Title = "Book2"
@@ -90,7 +89,7 @@ namespace MyKniga.Tests
                 {
                     Title = "Book1"
                 }
-            });
+            );
 
             await context.SaveChangesAsync();
 
@@ -142,7 +141,7 @@ namespace MyKniga.Tests
             Assert.NotNull(actualBook);
             Assert.Equal(expectedBook.Title, actualBook.Title);
         }
-        
+
         [Fact]
         public async Task GetBookByIdAsync_WithIncorrectId_ReturnsNull()
         {
@@ -177,12 +176,12 @@ namespace MyKniga.Tests
 
             // Act
             var result = await booksService.AddTagToBookAsync(book.Id, tag.Id);
-            
+
             // Assert
             Assert.True(result);
             Assert.True(await context.BookTags.AnyAsync(bt => bt.BookId == book.Id && bt.TagId == tag.Id));
         }
-        
+
         [Fact]
         public async Task AddTagToBookAsync_WithIncorrectTagId_ReturnsFalse()
         {
@@ -199,12 +198,12 @@ namespace MyKniga.Tests
 
             // Act
             var result = await booksService.AddTagToBookAsync(book.Id, nonexistentTagId);
-            
+
             // Assert
             Assert.False(result);
             Assert.False(await context.BookTags.AnyAsync(bt => bt.BookId == book.Id && bt.TagId == tag.Id));
         }
-        
+
         [Fact]
         public async Task AddTagToBookAsync_WithIncorrectBookId_ReturnsFalse()
         {
@@ -221,12 +220,12 @@ namespace MyKniga.Tests
 
             // Act
             var result = await booksService.AddTagToBookAsync(nonexistentBookId, tag.Id);
-            
+
             // Assert
             Assert.False(result);
             Assert.False(await context.BookTags.AnyAsync(bt => bt.BookId == book.Id && bt.TagId == tag.Id));
         }
-        
+
         [Fact]
         public async Task AddTagToBookAsync_WithExistingBookTagRelation_ReturnsFalse()
         {
@@ -243,14 +242,146 @@ namespace MyKniga.Tests
                 BookId = book.Id,
                 TagId = tag.Id
             });
-            
+
             await context.SaveChangesAsync();
 
             // Act
             var result = await booksService.AddTagToBookAsync(book.Id, tag.Id);
-            
+
             // Assert
             Assert.False(result);
+        }
+
+        [Fact]
+        public async Task RemoveTagFromBookAsync_WithCorrectIds_WorksCorrectly()
+        {
+            // Arrange
+            var bookId = Guid.NewGuid().ToString();
+            var tagId = Guid.NewGuid().ToString();
+            var context = this.NewInMemoryDatabase();
+
+            await context.BookTags.AddAsync(new BookTag
+            {
+                BookId = bookId,
+                TagId = tagId
+            });
+
+            await context.SaveChangesAsync();
+
+            var booksService = new BooksService(context);
+
+            // Act
+            var result = await booksService.RemoveTagFromBookAsync(bookId, tagId);
+
+            // Assert
+            Assert.True(result);
+            Assert.Equal(0, await context.BookTags.CountAsync());
+        }
+
+        [Fact]
+        public async Task RemoveTagFromBookAsync_WithIncorrectTagId_ReturnsFalse()
+        {
+            // Arrange
+            var bookId = Guid.NewGuid().ToString();
+            var fakeId = Guid.NewGuid().ToString();
+
+            var context = this.NewInMemoryDatabase();
+
+            await context.BookTags.AddAsync(new BookTag
+            {
+                BookId = bookId,
+                TagId = Guid.NewGuid().ToString()
+            });
+
+            await context.SaveChangesAsync();
+
+            var booksService = new BooksService(context);
+
+            // Act
+            var result = await booksService.RemoveTagFromBookAsync(bookId, fakeId);
+
+            // Assert
+            Assert.False(result);
+            Assert.Equal(1, await context.BookTags.CountAsync());
+        }
+
+        [Fact]
+        public async Task RemoveTagFromBookAsync_WithIncorrectBookId_ReturnsFalse()
+        {
+            // Arrange
+            var tagId = Guid.NewGuid().ToString();
+            var fakeId = Guid.NewGuid().ToString();
+
+            var context = this.NewInMemoryDatabase();
+
+            await context.BookTags.AddAsync(new BookTag
+            {
+                BookId = Guid.NewGuid().ToString(),
+                TagId = tagId
+            });
+
+            await context.SaveChangesAsync();
+
+            var booksService = new BooksService(context);
+
+            // Act
+            var result = await booksService.RemoveTagFromBookAsync(fakeId, tagId);
+
+            // Assert
+            Assert.False(result);
+            Assert.Equal(1, await context.BookTags.CountAsync());
+        }
+
+        [Fact]
+        public async Task RemoveTagFromBookAsync_WithNullBookId_ReturnsFalse()
+        {
+            // Arrange
+            var tagId = Guid.NewGuid().ToString();
+
+            var context = this.NewInMemoryDatabase();
+
+            await context.BookTags.AddAsync(new BookTag
+            {
+                BookId = Guid.NewGuid().ToString(),
+                TagId = tagId
+            });
+
+            await context.SaveChangesAsync();
+
+            var booksService = new BooksService(context);
+
+            // Act
+            var result = await booksService.RemoveTagFromBookAsync(null, tagId);
+
+            // Assert
+            Assert.False(result);
+            Assert.Equal(1, await context.BookTags.CountAsync());
+        }
+
+        [Fact]
+        public async Task RemoveTagFromBookAsync_WithNullTagId_ReturnsFalse()
+        {
+            // Arrange
+            var bookId = Guid.NewGuid().ToString();
+
+            var context = this.NewInMemoryDatabase();
+
+            await context.BookTags.AddAsync(new BookTag
+            {
+                BookId = bookId,
+                TagId = Guid.NewGuid().ToString()
+            });
+
+            await context.SaveChangesAsync();
+
+            var booksService = new BooksService(context);
+
+            // Act
+            var result = await booksService.RemoveTagFromBookAsync(bookId, null);
+
+            // Assert
+            Assert.False(result);
+            Assert.Equal(1, await context.BookTags.CountAsync());
         }
     }
 }
