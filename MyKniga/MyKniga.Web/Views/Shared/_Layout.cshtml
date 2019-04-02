@@ -25,30 +25,40 @@
                     <a class="nav-link" asp-controller="Books" asp-action="Index">Books</a>
                 </li>
 
-                @if (User.IsInRole(GlobalConstants.PublisherRoleName))
+                @if (User.Identity.IsAuthenticated)
                 {
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="Books" asp-action="Create">Create Book</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Tags" asp-action="Create">Create Tag</a>
-                    </li>
-                }
-                
-                @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
-                {
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Publishers" asp-action="Create">Create Publisher</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="UserAdministration" asp-action="Index">Users</a>
+                        <a class="nav-link" asp-controller="Purchase" asp-action="My">My Books</a>
                     </li>
                 }
 
-                @if (User.Identity.IsAuthenticated)
+                @if (User.IsInRole(GlobalConstants.PublisherRoleName))
                 {
-                    <li>
-                        <a class="nav-link" asp-controller="Purchase" asp-action="My">My Books</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="publisherDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Publisher
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="publisherDropdown">
+                            <h5 class="dropdown-header">Publisher</h5>
+                            <a class="dropdown-item" asp-controller="Books" asp-action="Create">Create Book</a>
+                            <a class="dropdown-item" asp-controller="Tags" asp-action="Create">Create Tag</a>
+                        </div>
+                    </li>
+                }
+
+                @if (User.IsInRole(GlobalConstants.AdministratorRoleName))
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="administratorDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Admin
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="administratorDropdown">
+                            <h5 class="dropdown-header">Administrator</h5>
+                            <a class="dropdown-item" asp-controller="Publishers" asp-action="Create">Create Publisher</a>
+                            <a class="dropdown-item" asp-controller="UserAdministration" asp-action="Index">Users</a>
+                        </div>
                     </li>
                 }
             </ul>
