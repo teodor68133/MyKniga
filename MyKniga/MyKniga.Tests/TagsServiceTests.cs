@@ -49,7 +49,7 @@
 
             // Assert
             Assert.False(result);
-            Assert.Equal(0, context.Tags.Count());
+            Assert.Equal(0, await context.Tags.CountAsync());
         }
 
         [Fact]
@@ -79,7 +79,7 @@
             // Assert
             Assert.False(result);
             Assert.True(await context.Tags.AnyAsync(t => t.Name == testTagName));
-            Assert.Equal(1, context.Tags.Count());
+            Assert.Equal(1, await context.Tags.CountAsync());
         }
 
         [Fact]
