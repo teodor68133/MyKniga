@@ -147,9 +147,9 @@ namespace MyKniga.Web.Controllers
                 return this.Ok(new {success = false});
             }
 
-            await this.booksService.RemoveTagFromBookAsync(bookId, tagId);
+            var success = await this.booksService.RemoveTagFromBookAsync(bookId, tagId);
 
-            return this.Ok(new {success = true});
+            return this.Ok(new {success});
         }
 
         [HttpPost]

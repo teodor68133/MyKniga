@@ -76,18 +76,25 @@ namespace MyKniga.Services
             return true;
         }
 
-        public async Task RemoveTagFromBookAsync(string bookId, string tagId)
+        public async Task<bool> RemoveTagFromBookAsync(string bookId, string tagId)
         {
+            if (bookId == null || tagId == null)
+            {
+                return false;
+            }
+
             var bookTag = await this.Context.BookTags.SingleOrDefaultAsync(bt =>
                 bt.BookId == bookId && bt.TagId == tagId);
 
             if (bookTag == null)
             {
-                return;
+                return false;
             }
 
             this.Context.BookTags.Remove(bookTag);
             await this.Context.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<bool> DeleteBookAsync(string bookId)
