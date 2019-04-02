@@ -2,6 +2,7 @@ namespace MyKniga.Services.Interfaces
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Models;
     using Models.Book;
 
     public interface IBooksService
@@ -12,5 +13,7 @@ namespace MyKniga.Services.Interfaces
         Task<bool> AddTagToBookAsync(string bookId, string tagId);
         Task<bool> RemoveTagFromBookAsync(string bookId, string tagId);
         Task<bool> DeleteBookAsync(string bookId);
+        Task<IEnumerable<T>> GetBooksByFilteringAsync<T>(BookFilteringServiceModel model)
+            where T : BaseBookServiceModel;
     }
 }

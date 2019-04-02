@@ -8,6 +8,7 @@ namespace MyKniga.Services
     using Data;
     using Interfaces;
     using Microsoft.EntityFrameworkCore;
+    using Models;
     using Models.Book;
     using MyKniga.Models;
 
@@ -52,6 +53,49 @@ namespace MyKniga.Services
                 .SingleOrDefaultAsync(b => b.Id == id);
 
             return serviceBook;
+        }
+
+        public async Task<IEnumerable<T>> GetBooksByFilteringAsync<T>(BookFilteringServiceModel model)
+            where T : BaseBookServiceModel
+        {
+            var allBooks = this.Context.Books.AsQueryable();
+
+            if (model.TagId != null)
+            {
+                allBooks = allBooks.Where(b => b.BookTags.Any(t => t.TagId == model.TagId));
+            }
+
+            if (model.PublisherId != null)
+            {
+                allBooks = allBooks.Where(b => b.PublisherId == model.PublisherId);
+            }
+
+            if (model.YearFrom != null)
+            {
+                allBooks = allBooks.Where(b => b.Year >= model.YearFrom.Value);
+            }
+
+            if (model.YearTo != null)
+            {
+                allBooks = allBooks.Where(b => b.Year <= model.YearTo.Value);
+            }
+
+            if (model.PriceFrom != null)
+            {
+                allBooks = allBooks.Where(b => b.Price >= model.PriceFrom.Value);
+            }
+
+            if (model.PriceTo != null)
+            {
+                allBooks = allBooks.Where(b => b.Price <= model.PriceTo.Value);
+            }
+
+            var selectedBooks = await allBooks
+                .OrderBy(b => b.Title)
+                .ProjectTo<T>()
+                .ToArrayAsync();
+
+            return selectedBooks;
         }
 
         public async Task<bool> AddTagToBookAsync(string bookId, string tagId)
