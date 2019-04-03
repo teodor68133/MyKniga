@@ -1,17 +1,97 @@
+@model AllBooksViewModel
+
 @{
     ViewData["Title"] = "Books";
 }
 
 <div class="row">
-    <div class="col-12 col-md-3">
-        <div class="card m-2 bg-grey-ish p-2">
-            These are my filters
-        </div>
+    <div class="col-12 col-lg-3">
+        <form id="filterForm">
+            <div class="card mx-2 bg-grey-ish p-2 my-3">
+                <div class="form-group">
+                    <label class="font-weight-bold">Publishers</label>
+                    <button class="btn btn-link text-dark btn-sm float-right" type="button"
+                            data-toggle="collapse" data-target="#publishersDiv">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="collapse show" id="publishersDiv">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="anyPublisher" name="publisherId" checked="checked"
+                                   class="custom-control-input" value="">
+                            <label class="custom-control-label" for="anyPublisher">Any publisher</label>
+                        </div>
+                        @foreach (var publisher in Model.Publishers)
+                        {
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="@publisher.Id" name="publisherId"
+                                       class="custom-control-input" value="@publisher.Id">
+                                <label class="custom-control-label" for="@publisher.Id">@publisher.Name</label>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card mx-2 bg-grey-ish p-2 my-3">
+                <div class="form-group">
+                    <label class="font-weight-bold">Tags</label>
+                    <button class="btn btn-link text-dark btn-sm float-right" type="button"
+                            data-toggle="collapse" data-target="#tagsDiv">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="collapse show" id="tagsDiv">
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="anyTag" name="tagId" checked="checked"
+                                   class="custom-control-input" value="">
+                            <label class="custom-control-label" for="anyTag">Any tag</label>
+                        </div>
+                        @foreach (var tag in Model.Tags)
+                        {
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="@tag.Id" name="tagId"
+                                       class="custom-control-input" value="@tag.Id">
+                                <label class="custom-control-label" for="@tag.Id">@tag.Name</label>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="card mx-2 bg-grey-ish p-2 my-3">
+                <div class="form-group">
+                    <label class="font-weight-bold">Year</label>
+                    <div class="row mx-1">
+                        <div class="col-5 p-0">
+                            <input type="text" class="form-control form-control-sm" name="yearFrom" placeholder="From"/>
+                        </div>
+                        <span class="col-2 p-0 my-auto text-center">/</span>
+                        <div class="col-5 p-0">
+                            <input type="text" class="form-control form-control-sm" name="yearTo" placeholder="To"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mx-2 bg-grey-ish p-2 my-3">
+                <div class="form-group">
+                    <label class="font-weight-bold">Price</label>
+                    <div class="row mx-1">
+                        <div class="col-5 p-0">
+                            <input type="text" class="form-control form-control-sm" name="priceFrom" placeholder="From"/>
+                        </div>
+                        <span class="col-2 p-0 my-auto text-center">/</span>
+                        <div class="col-5 p-0">
+                            <input type="text" class="form-control form-control-sm" name="priceTo" placeholder="To"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group m-2">
+                <button type="button" class="btn btn-primary w-100" onclick="refreshBooks()">Update</button>
+            </div>
+        </form>
     </div>
-    
-    <div class="col-12 col-md-9">
+
+    <div class="col-12 col-lg-9">
         <div class="row" id="booksList">
-            
+
         </div>
     </div>
 </div>
