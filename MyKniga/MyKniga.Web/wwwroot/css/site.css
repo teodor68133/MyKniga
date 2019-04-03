@@ -52,3 +52,31 @@
         width: 25% !important;
     }
 }
+
+.index-background {
+    background-image: url("../img/home-image.jpg");
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+}
+
+.index-heading {
+    color: white;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-size: 4em;
+    padding: 10px 20px;
+}
+
+.index-paragraph {
+    color: gray;
+    font-size: 3em;
+}
+
+.index-text-container {
+    background-color: rgba(23,23,23, .7);
+    width: 100%;
+}
