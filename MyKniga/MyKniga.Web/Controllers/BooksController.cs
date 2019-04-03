@@ -8,6 +8,7 @@ namespace MyKniga.Web.Controllers
     using Microsoft.AspNetCore.Mvc;
     using Models;
     using Services.Interfaces;
+    using Services.Models;
     using Services.Models.Book;
 
     public class BooksController : BaseController
@@ -16,14 +17,16 @@ namespace MyKniga.Web.Controllers
         private readonly ITagsService tagsService;
         private readonly IUsersService usersService;
         private readonly IPurchasesService purchasesService;
+        private readonly IPublishersService publishersService;
 
         public BooksController(IBooksService booksService, ITagsService tagsService, IUsersService usersService,
-            IPurchasesService purchasesService)
+            IPurchasesService purchasesService, IPublishersService publishersService)
         {
             this.booksService = booksService;
             this.tagsService = tagsService;
             this.usersService = usersService;
             this.purchasesService = purchasesService;
+            this.publishersService = publishersService;
         }
 
         [Authorize(Policy = GlobalConstants.AdministratorOrPublisherPolicyName)]
@@ -66,14 +69,28 @@ namespace MyKniga.Web.Controllers
             return this.RedirectToAction("Details", "Books", new {id = bookId});
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return this.View();
+            var servicePublishers = await this.publishersService.GetAllPublishersAsync();
+            var serviceTags = await this.tagsService.GetAllTagsAsync();
+
+            var publishers = servicePublishers.Select(Mapper.Map<PublisherListingViewModel>).ToArray();
+            var tags = serviceTags.Select(Mapper.Map<TagDisplayViewModel>).ToArray();
+
+            var model = new AllBooksViewModel
+            {
+                Publishers = publishers,
+                Tags = tags
+            };
+            
+            return this.View(model);
         }
 
-        public async Task<IActionResult> GetBooks()
+        public async Task<IActionResult> GetBooks(BookFilteringBindingModel model)
         {
-            var allBooks = await this.booksService.GetAllBooksAsync<BookListingServiceModel>();
+            var serviceModel = Mapper.Map<BookFilteringServiceModel>(model);
+
+            var allBooks = await this.booksService.GetBooksByFilteringAsync<BookListingServiceModel>(serviceModel);
 
             return this.Ok(allBooks);
         }
