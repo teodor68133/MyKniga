@@ -1,0 +1,27 @@
+@{
+    ViewData["Title"] = "Tag Administration";
+}
+
+<div class="text-center mx-auto">
+    <h1>Tags</h1>
+    <div class="w-100 w-md-50 mx-auto my-2">
+        <input type="text" class="form-control" id="searchQuery" placeholder="Search tag" autocomplete="off"/>
+    </div>
+    <span class="mt-4" style="line-height: 3em" id="tagsList">
+    </span>
+    <div class="w-100 w-md-50 mx-auto mt-5">
+        <div class="input-group">
+            <input class="form-control" placeholder="Add tag" id="addTagField"/>
+            <div class="input-group-append">
+                <button type="button" class="btn btn-primary" onclick="createTag()">Create</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form method="post" id="verificationForm"></form>
+
+@section Scripts
+{
+    <script src="~/js/tag-listing.js"></script>
+}

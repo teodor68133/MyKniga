@@ -1,5 +1,6 @@
 namespace MyKniga.Web.Controllers
 {
+    using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
     using Common;
@@ -19,31 +20,59 @@ namespace MyKniga.Web.Controllers
             this.tagsService = tagsService;
         }
 
-        public IActionResult Create()
+        [HttpPost]
+        public async Task<IActionResult> Create(string name)
         {
-            return this.View();
+            if (name == null)
+            {
+                return this.Ok(new {success = false});
+            }
+
+            var serviceModel = new TagCreateServiceModel
+            {
+                Name = name
+            };
+
+            var success = await this.tagsService.CreateAsync(serviceModel);
+
+            return this.Ok(new {success});
+        }
+
+        public async Task<IActionResult> GetTags(string searchQuery)
+        {
+            var serviceTags = await this.tagsService.GetAllTagsAsync(searchQuery);
+
+            var viewTags = serviceTags.Select(Mapper.Map<TagDisplayViewModel>);
+
+            var model = new TagListingViewModel
+            {
+                Tags = viewTags
+            };
+
+            return this.Ok(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(TagCreateBindingModel model)
+        public async Task<IActionResult> DeleteTag(string tagId)
         {
-            if (!this.ModelState.IsValid)
+            if (tagId == null)
             {
-                return this.View(model);
+                return this.Ok(new {success = false});
             }
 
-            var serviceModel = Mapper.Map<TagCreateServiceModel>(model);
+            var success = await this.tagsService.DeleteTagAsync(tagId);
 
-            var isSuccess = await this.tagsService.CreateAsync(serviceModel);
-
-            if (!isSuccess)
+            if (!success)
             {
-                this.ShowErrorMessage(NotificationMessages.TagCreateErrorMessage);
-                return this.View(model);
+                return this.Ok(new {success = false});
             }
 
-            this.ShowSuccessMessage(NotificationMessages.TagCreateSuccessMessage);
-            return this.RedirectToAction("Index", "Home");
+            return this.Ok(new {success = true});
+        }
+
+        public IActionResult Administer()
+        {
+            return this.View();
         }
     }
 }
