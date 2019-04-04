@@ -141,6 +141,37 @@ namespace MyKniga.Services
             return true;
         }
 
+        public async Task<bool> UpdateBookAsync(BookEditServiceModel model)
+        {
+            if (!this.IsEntityStateValid(model))
+            {
+                return false;
+            }
+
+            var book = await this.Context.Books.SingleOrDefaultAsync(b => b.Id == model.Id);
+
+            if (book == null)
+            {
+                return false;
+            }
+
+            book.Title = model.Title;
+            book.Author = model.Author;
+            book.Price = model.Price;
+            book.Year = model.Year;
+            book.Description = model.Description;
+            book.ShortDescription = model.ShortDescription;
+            book.Pages = model.Pages;
+            book.ImageUrl = model.ImageUrl;
+            book.DownloadUrl = model.DownloadUrl;
+            book.Isbn = model.Isbn;
+
+            this.Context.Books.Update(book);
+            await this.Context.SaveChangesAsync();
+
+            return true;
+        }
+
         public async Task<bool> DeleteBookAsync(string bookId)
         {
             if (bookId == null)

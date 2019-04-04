@@ -15,5 +15,7 @@ namespace MyKniga.Services.Interfaces
         Task<bool> DeleteBookAsync(string bookId);
         Task<IEnumerable<T>> GetBooksByFilteringAsync<T>(BookFilteringServiceModel model)
             where T : BaseBookServiceModel;
+
+        Task<bool> UpdateBookAsync(BookEditServiceModel model);
     }
 }
