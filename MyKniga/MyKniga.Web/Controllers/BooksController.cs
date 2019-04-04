@@ -86,6 +86,53 @@ namespace MyKniga.Web.Controllers
             return this.View(model);
         }
 
+        [Authorize(Policy = GlobalConstants.AdministratorOrPublisherPolicyName)]
+        public async Task<IActionResult> Edit(string id)
+        {
+            var serviceBook = await this.booksService.GetBookByIdAsync<BookEditServiceModel>(id);
+
+            if (serviceBook == null || !await this.UserCanEditBookAsync(serviceBook))
+            {
+                this.ShowErrorMessage(NotificationMessages.BookEditErrorMessage);
+                return this.RedirectToAction("Index");
+            }
+
+            var model = Mapper.Map<BookEditBindingModel>(serviceBook);
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        [Authorize(Policy = GlobalConstants.AdministratorOrPublisherPolicyName)]
+        public async Task<IActionResult> Edit(BookEditBindingModel model)
+        {
+            var serviceBook = await this.booksService.GetBookByIdAsync<BookWithPublisherServiceModel>(model.Id);
+
+            if (serviceBook == null || !await this.UserCanEditBookAsync(serviceBook))
+            {
+                this.ShowErrorMessage(NotificationMessages.BookEditErrorMessage);
+                return this.RedirectToAction("Index");
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+
+            var serviceModel = Mapper.Map<BookEditServiceModel>(model);
+
+            var success = await this.booksService.UpdateBookAsync(serviceModel);
+
+            if (!success)
+            {
+                this.ShowErrorMessage(NotificationMessages.BookEditErrorMessage);
+                return this.RedirectToAction("Index");
+            }
+
+            this.ShowSuccessMessage(NotificationMessages.BookEditSuccessMessage);
+            return this.RedirectToAction("Details", new {id = model.Id});
+        }
+
         public async Task<IActionResult> GetBooks(BookFilteringBindingModel model)
         {
             var serviceModel = Mapper.Map<BookFilteringServiceModel>(model);
