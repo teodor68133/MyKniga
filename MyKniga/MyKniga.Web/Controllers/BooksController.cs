@@ -82,7 +82,7 @@ namespace MyKniga.Web.Controllers
                 Publishers = publishers,
                 Tags = tags
             };
-            
+
             return this.View(model);
         }
 
@@ -136,7 +136,7 @@ namespace MyKniga.Web.Controllers
                 return this.Ok(new {success = false});
             }
 
-            var book = await this.booksService.GetBookByIdAsync<BookDetailsServiceModel>(bookId);
+            var book = await this.booksService.GetBookByIdAsync<BookWithPublisherServiceModel>(bookId);
 
             if (book == null || !await this.UserCanEditBookAsync(book))
             {
@@ -157,7 +157,7 @@ namespace MyKniga.Web.Controllers
                 return this.Ok(new {success = false});
             }
 
-            var book = await this.booksService.GetBookByIdAsync<BookDetailsServiceModel>(bookId);
+            var book = await this.booksService.GetBookByIdAsync<BookWithPublisherServiceModel>(bookId);
 
             if (book == null || !await this.UserCanEditBookAsync(book))
             {
@@ -179,7 +179,7 @@ namespace MyKniga.Web.Controllers
                 return this.RedirectToAction("Index");
             }
 
-            var book = await this.booksService.GetBookByIdAsync<BookDetailsServiceModel>(bookId);
+            var book = await this.booksService.GetBookByIdAsync<BookWithPublisherServiceModel>(bookId);
 
             if (book == null || !await this.UserCanEditBookAsync(book))
             {
@@ -199,7 +199,7 @@ namespace MyKniga.Web.Controllers
             return this.RedirectToAction("Index");
         }
 
-        private async Task<bool> UserCanEditBookAsync(BookDetailsServiceModel model)
+        private async Task<bool> UserCanEditBookAsync(BookWithPublisherServiceModel model)
         {
             if (!this.User.Identity.IsAuthenticated)
             {

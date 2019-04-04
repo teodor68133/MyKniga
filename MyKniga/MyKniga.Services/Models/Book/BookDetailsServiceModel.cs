@@ -2,7 +2,7 @@ namespace MyKniga.Services.Models.Book
 {
     using System.Collections.Generic;
 
-    public class BookDetailsServiceModel : BaseBookServiceModel
+    public class BookDetailsServiceModel : BookWithPublisherServiceModel
     {
         public string Title { get; set; }
 
@@ -23,8 +23,6 @@ namespace MyKniga.Services.Models.Book
         public string DownloadUrl { get; set; }
 
         public string Isbn { get; set; }
-
-        public string PublisherId { get; set; }
 
         public IEnumerable<BookTagDisplayServiceModel> BookTags { get; set; }
     }
