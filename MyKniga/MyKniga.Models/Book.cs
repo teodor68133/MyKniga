@@ -39,6 +39,10 @@ namespace MyKniga.Models
         public string ImageUrl { get; set; }
 
         [Required]
+        [MaxLength(150)]
+        public string DownloadUrl { get; set; }
+
+        [Required]
         [MaxLength(13)]
         public string Isbn { get; set; }
 
