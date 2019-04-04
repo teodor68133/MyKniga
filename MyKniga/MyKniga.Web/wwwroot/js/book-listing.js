@@ -35,5 +35,6 @@ function refreshBooks() {
 }
 
 (function () {
+    $('#filterForm input').change(refreshBooks);
     refreshBooks();
 })();
