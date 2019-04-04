@@ -86,7 +86,7 @@ namespace MyKniga.Web.Controllers
 
             this.ShowSuccessMessage(NotificationMessages.PurchaseSuccessMessage);
 
-            return this.RedirectToAction("Index", "Home");
+            return this.RedirectToAction("My");
         }
 
         public async Task<IActionResult> My()
