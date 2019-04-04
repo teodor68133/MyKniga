@@ -17,7 +17,7 @@ namespace MyKniga.Services.Models.Book
         [Required]
         [Range(typeof(decimal), "0", "10000")]
         public decimal Price { get; set; }
-        
+
         [Required]
         [Range(0, int.MaxValue)]
         public int Year { get; set; }
@@ -25,7 +25,7 @@ namespace MyKniga.Services.Models.Book
         [Required]
         [MaxLength(1500)]
         public string Description { get; set; }
-        
+
         [Required]
         [MaxLength(200)]
         public string ShortDescription { get; set; }
@@ -33,16 +33,20 @@ namespace MyKniga.Services.Models.Book
         [Required]
         [Range(0, int.MaxValue)]
         public int Pages { get; set; }
-        
+
         [Required]
         [MaxLength(150)]
         public string ImageUrl { get; set; }
-        
+
+        [Required]
+        [MaxLength(150)]
+        public string DownloadUrl { get; set; }
+
         [Required]
         [MaxLength(13)]
         [RegularExpression(@"^\d{13}$")]
         public string Isbn { get; set; }
-        
+
         [Required]
         public string PublisherId { get; set; }
     }

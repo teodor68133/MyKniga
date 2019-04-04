@@ -20,6 +20,8 @@ namespace MyKniga.Services.Models.Book
 
         public string ImageUrl { get; set; }
 
+        public string DownloadUrl { get; set; }
+
         public string Isbn { get; set; }
 
         public string PublisherId { get; set; }
