@@ -10,5 +10,7 @@ namespace MyKniga.Web.Models
         public BookListingServiceModel Book { get; set; }
 
         public DateTime PurchaseDate { get; set; }
+
+        public string BookDownloadUrl { get; set; }
     }
 }

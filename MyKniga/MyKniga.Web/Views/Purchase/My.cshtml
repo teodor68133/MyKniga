@@ -13,15 +13,20 @@
             <div class="col-12 col-lg-3 text-center">
                 <img src="@purchase.Book.ImageUrl" class="book-listing-img" alt="@purchase.Book.Title"/>
             </div>
-            <div class="col-12 col-lg-7">
+            <div class="col-12 col-lg-6">
                 <div class="mx-3">
                     <h4 class="mt-2">@purchase.Book.Title</h4>
                     <p class="text-secondary">@purchase.Book.Author</p>
                     <p class="text-secondary">Purchased on @purchase.PurchaseDate.ToString("dddd, dd.MM.yyyy")</p>
                 </div>
             </div>
-            <div class="col-12 col-lg-2 text-right">
-                <a class="btn btn-primary" asp-controller="Books" asp-action="Details" asp-route-id="@purchase.Book.Id">
+            <div class="col-12 col-lg-3 text-right d-flex flex-column justify-content-around">
+                <a class="btn btn-primary mt-1" href="@purchase.BookDownloadUrl">
+                    <i class="fas fa-file-download"></i>
+                    Download
+                </a>
+                <a class="btn btn-outline-info mb-1" asp-controller="Books" asp-action="Details" asp-route-id="@purchase.Book.Id">
+                    <i class="fas fa-info-circle"></i>
                     Details
                 </a>
             </div>
