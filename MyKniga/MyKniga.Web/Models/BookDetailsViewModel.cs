@@ -24,6 +24,8 @@ namespace MyKniga.Web.Models
 
         public string ImageUrl { get; set; }
 
+        public string DownloadUrl { get; set; }
+
         public string Isbn { get; set; }
 
         public bool CanEdit { get; set; }

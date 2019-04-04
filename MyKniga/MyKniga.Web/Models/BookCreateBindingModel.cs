@@ -42,6 +42,12 @@ namespace MyKniga.Web.Models
         public string ImageUrl { get; set; }
 
         [Required]
+        [MaxLength(150)]
+        [Url]
+        [Display(Name = "Download URL")]
+        public string DownloadUrl { get; set; }
+
+        [Required]
         [MaxLength(13)]
         [RegularExpression(@"^\d{13}$")]
         [Display(Name = "ISBN")]
