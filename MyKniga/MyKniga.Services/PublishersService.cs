@@ -149,6 +149,11 @@ namespace MyKniga.Services
         public async Task<T> GetPublisherByIdAsync<T>(string id)
             where T : BasePublisherServiceModel
         {
+            if (id == null)
+            {
+                return null;
+            }
+
             var servicePublisher = await this.Context.Publishers
                 .ProjectTo<T>()
                 .SingleOrDefaultAsync(p => p.Id == id);
