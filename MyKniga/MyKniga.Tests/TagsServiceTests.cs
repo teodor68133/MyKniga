@@ -1,4 +1,4 @@
-﻿namespace MyKniga.Tests
+namespace MyKniga.Tests
 {
     using System.Linq;
     using System.Threading.Tasks;
@@ -89,16 +89,12 @@
             var expectedResult = new[] {"Tag1", "Tag2"};
             var context = this.NewInMemoryDatabase();
 
-            await context.Tags.AddRangeAsync(new[]
+            await context.Tags.AddRangeAsync(new Tag
             {
-                new Tag
-                {
-                    Name = "Tag2"
-                },
-                new Tag
-                {
-                    Name = "Tag1"
-                }
+                Name = "Tag2"
+            }, new Tag
+            {
+                Name = "Tag1"
             });
 
             await context.SaveChangesAsync();
