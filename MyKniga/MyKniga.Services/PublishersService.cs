@@ -68,7 +68,15 @@ namespace MyKniga.Services
                 return false;
             }
 
-            publisher.Name = model.Name;
+            var nameToCheck = model.Name.Trim().ToLower();
+
+            // Check if publisher name has already been taken
+            if (await this.Context.Publishers.AnyAsync(p => p.Name.ToLower() == nameToCheck))
+            {
+                return false;
+            }
+
+            publisher.Name = model.Name.Trim();
             publisher.Description = model.Description;
             publisher.ImageUrl = model.ImageUrl;
 
