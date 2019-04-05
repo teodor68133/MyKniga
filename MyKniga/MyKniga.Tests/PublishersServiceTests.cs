@@ -510,6 +510,188 @@
         }
 
         [Fact]
+        public async Task GetPublisherByIdAsync_WithCorrectId_WorksCorrectly()
+        {
+            // Arrange 
+            var context = this.NewInMemoryDatabase();
+
+            var expectedPublisher = new Publisher
+            {
+                Name = "Publisher1"
+            };
+
+            await context.Publishers.AddRangeAsync(
+                expectedPublisher,
+                new Publisher
+                {
+                    Name = "Publisher2"
+                }
+            );
+
+            await context.SaveChangesAsync();
+
+            var publishersService = new PublishersService(context);
+
+            // Act
+            var actualPublisher = await publishersService
+                .GetPublisherByIdAsync<PublisherDetailsServiceModel>(expectedPublisher.Id);
+
+            // Assert
+            Assert.NotNull(actualPublisher);
+            Assert.Equal(expectedPublisher.Id, actualPublisher.Id);
+        }
+
+        [Fact]
+        public async Task GetPublisherByIdAsync_WithNullId_ReturnsNull()
+        {
+            // Arrange 
+            var context = this.NewInMemoryDatabase();
+
+            await context.Publishers.AddAsync(new Publisher {Name = "Publisher1"});
+
+            await context.SaveChangesAsync();
+
+            var publishersService = new PublishersService(context);
+
+            // Act
+            var actualPublisher = await publishersService
+                .GetPublisherByIdAsync<PublisherDetailsServiceModel>(null);
+
+            // Assert
+            Assert.Null(actualPublisher);
+        }
+
+        [Fact]
+        public async Task GetPublisherByIdAsync_WithNonexistentId_ReturnsNull()
+        {
+            // Arrange 
+            var context = this.NewInMemoryDatabase();
+            var id = Guid.NewGuid().ToString();
+
+            await context.Publishers.AddAsync(new Publisher {Name = "Publisher1"});
+
+            await context.SaveChangesAsync();
+
+            var publishersService = new PublishersService(context);
+
+            // Act
+            var actualPublisher = await publishersService.GetPublisherByIdAsync<PublisherDetailsServiceModel>(id);
+
+            // Assert
+            Assert.Null(actualPublisher);
+        }
+
+        [Fact]
+        public async Task GetAllUserIdsInPublisherAsync_WithCorrectId_WorksCorrectly()
+        {
+            // Arrange
+            var context = this.NewInMemoryDatabase();
+
+            var testPublisherId = Guid.NewGuid().ToString();
+
+            var user1 = new KnigaUser
+            {
+                UserName = "User1",
+                PublisherId = testPublisherId
+            };
+
+            var user2 = new KnigaUser
+            {
+                UserName = "User2",
+                PublisherId = testPublisherId
+            };
+
+            await context.Users.AddRangeAsync(
+                user1, user2,
+                new KnigaUser
+                {
+                    UserName = "User3",
+                    PublisherId = Guid.NewGuid().ToString()
+                }
+            );
+            await context.SaveChangesAsync();
+
+            var expectedIds = new[] {user1.Id, user2.Id}.OrderBy(i => i).ToArray();
+
+            var publishersService = new PublishersService(context);
+
+            // Act
+            var actualIds = (await publishersService.GetAllUserIdsInPublisherAsync(testPublisherId))
+                .OrderBy(i => i)
+                .ToArray();
+
+            // Assert
+            Assert.NotNull(actualIds);
+            Assert.Equal(expectedIds, actualIds);
+        }
+
+        [Fact]
+        public async Task GetAllUserIdsInPublisherAsync_WithNullId_ReturnsNull()
+        {
+            // Arrange
+            var context = this.NewInMemoryDatabase();
+
+            var testPublisherId = Guid.NewGuid().ToString();
+
+            var user1 = new KnigaUser
+            {
+                UserName = "User1",
+                PublisherId = testPublisherId
+            };
+
+            var user2 = new KnigaUser
+            {
+                UserName = "User2",
+                PublisherId = testPublisherId
+            };
+
+            await context.Users.AddRangeAsync(user1, user2);
+            await context.SaveChangesAsync();
+
+            var publishersService = new PublishersService(context);
+
+            // Act
+            var result = await publishersService.GetAllUserIdsInPublisherAsync(null);
+
+            // Assert
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public async Task GetAllUserIdsInPublisherAsync_WithNoUsers_ReturnsEmptyCollection()
+        {
+            // Arrange
+            var context = this.NewInMemoryDatabase();
+
+            var testPublisherId = Guid.NewGuid().ToString();
+            var otherPublisherId = Guid.NewGuid().ToString();
+
+            var user1 = new KnigaUser
+            {
+                UserName = "User1",
+                PublisherId = otherPublisherId
+            };
+
+            var user2 = new KnigaUser
+            {
+                UserName = "User2",
+                PublisherId = otherPublisherId
+            };
+
+            await context.Users.AddRangeAsync(user1, user2);
+            await context.SaveChangesAsync();
+
+            var publishersService = new PublishersService(context);
+
+            // Act
+            var result = await publishersService.GetAllUserIdsInPublisherAsync(testPublisherId);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Empty(result);
+        }
+
+        [Fact]
         public async Task DeletePublisherAsync_WithCorrectId_WorksCorrectly()
         {
             // Arrange
