@@ -100,6 +100,16 @@ namespace MyKniga.Services
             return true;
         }
 
+        public async Task<T> GetPublisherByIdAsync<T>(string id)
+            where T : BasePublisherServiceModel
+        {
+            var servicePublisher = await this.Context.Publishers
+                .ProjectTo<T>()
+                .SingleOrDefaultAsync(p => p.Id == id);
+
+            return servicePublisher;
+        }
+
         public async Task<bool> DeletePublisherAsync(string publisherId)
         {
             if (publisherId == null)
