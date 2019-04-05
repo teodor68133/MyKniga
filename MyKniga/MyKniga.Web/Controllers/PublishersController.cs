@@ -16,10 +16,12 @@ namespace MyKniga.Web.Controllers
     public class PublishersController : BaseController
     {
         private readonly IPublishersService publishersService;
+        private readonly UserManager<KnigaUser> userManager;
 
-        public PublishersController(IPublishersService service)
+        public PublishersController(IPublishersService service, UserManager<KnigaUser> userManager)
         {
             this.publishersService = service;
+            this.userManager = userManager;
         }
 
         public IActionResult Create()
@@ -99,6 +101,62 @@ namespace MyKniga.Web.Controllers
             };
 
             return this.View(model);
+        }
+
+        public async Task<IActionResult> ConfirmDeletion(string id)
+        {
+            if (id == null)
+            {
+                this.ShowErrorMessage(NotificationMessages.PublisherDeleteErrorMessage);
+                return this.RedirectToAction("Administer");
+            }
+
+            var publisher = await this.publishersService.GetPublisherByIdAsync<PublisherDetailsServiceModel>(id);
+
+            if (publisher == null)
+            {
+                this.ShowErrorMessage(NotificationMessages.PublisherDeleteErrorMessage);
+                return this.RedirectToAction("Administer");
+            }
+
+            var model = Mapper.Map<PublisherDetailsViewModel>(publisher);
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeletePublisher(string id)
+        {
+            if (id == null)
+            {
+                this.ShowErrorMessage(NotificationMessages.PublisherDeleteErrorMessage);
+                return this.RedirectToAction("Administer");
+            }
+
+            var userIds = await this.publishersService.GetAllUserIdsInPublisherAsync(id);
+
+            foreach (var userId in userIds)
+            {
+                var user = await this.userManager.FindByIdAsync(userId);
+
+                await this.publishersService.RemoveUserFromPublisherAsync(userId);
+
+                if (await this.userManager.IsInRoleAsync(user, GlobalConstants.PublisherRoleName))
+                {
+                    await this.userManager.RemoveFromRoleAsync(user, GlobalConstants.PublisherRoleName);
+                }
+            }
+
+            var success = await this.publishersService.DeletePublisherAsync(id);
+
+            if (!success)
+            {
+                this.ShowErrorMessage(NotificationMessages.PublisherDeleteErrorMessage);
+                return this.RedirectToAction("Administer");
+            }
+
+            this.ShowSuccessMessage(NotificationMessages.PublisherDeleteSuccessMessage);
+            return this.RedirectToAction("Administer");
         }
     }
 }

@@ -1,0 +1,20 @@
+@model PublisherDetailsViewModel
+
+@{
+    ViewData["Title"] = "Delete " + @Model.Name;
+}
+
+<div class="text-center mt-3 w-50 mx-auto">
+    <h3>Confirm Delete:</h3>
+    <img class="book-thumbnail-img my-2" src="@Model.ImageUrl" alt="@Model.Name"/>
+    <h3>@Model.Name</h3>
+    <p>@Model.Description</p>
+    <form method="post" asp-action="DeletePublisher" class="mt-3">
+        <input type="hidden" name="id" value="@Model.Id"/>
+        <a class="btn btn-outline-secondary mx-3" asp-controller="Publishers" asp-action="Administer">Cancel</a>
+        <button type="submit" class="btn btn-danger mx-3">
+            <i class="far fa-trash-alt"></i>
+            Delete
+        </button>
+    </form>
+</div>
