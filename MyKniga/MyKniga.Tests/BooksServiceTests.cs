@@ -5,6 +5,7 @@ namespace MyKniga.Tests
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
     using Models;
+    using MyKniga.Services.Models;
     using Services;
     using Services.Models.Book;
     using Xunit;
@@ -30,7 +31,8 @@ namespace MyKniga.Tests
                 Pages = 1,
                 ImageUrl = "http://example.com/favicon.ico",
                 Isbn = "0000005000000",
-                PublisherId = Guid.NewGuid().ToString()
+                PublisherId = Guid.NewGuid().ToString(),
+                DownloadUrl = "http://example.com/download.ico"
             };
 
             // Act
@@ -47,7 +49,6 @@ namespace MyKniga.Tests
         {
             // Arrange
             var context = this.NewInMemoryDatabase();
-
 
             var serviceModel = new BookCreateServiceModel
             {
@@ -237,7 +238,7 @@ namespace MyKniga.Tests
 
             await context.Tags.AddAsync(tag);
             await context.Books.AddAsync(book);
-            await context.BookTags.AddAsync(new BookTag()
+            await context.BookTags.AddAsync(new BookTag
             {
                 BookId = book.Id,
                 TagId = tag.Id
@@ -382,6 +383,467 @@ namespace MyKniga.Tests
             // Assert
             Assert.False(result);
             Assert.Equal(1, await context.BookTags.CountAsync());
+        }
+
+        [Fact]
+        public async Task UpdateBooksAsync_WithCorrectData_WorksCorrectly()
+        {
+            // Arrange
+            var context = this.NewInMemoryDatabase();
+
+            var testBook = new Book
+            {
+                Title = "TestBook1",
+                Author = "TestAuthor1",
+                Price = 11,
+                Year = 2011,
+                Description = "TestDescription1",
+                ShortDescription = "TestShortDescription1",
+                Pages = 2,
+                ImageUrl = "http://example.com/favicon.ico1",
+                Isbn = "0000005000001",
+                DownloadUrl = "http://downloadtest.com/1"
+            };
+
+            await context.Books.AddAsync(testBook);
+            await context.SaveChangesAsync();
+
+            var updateModel = new BookEditServiceModel
+            {
+                Id = testBook.Id,
+                Title = "TestBook",
+                Author = "TestAuthor",
+                Price = 1,
+                Year = 2001,
+                Description = "TestDescription",
+                ShortDescription = "TestShortDescription",
+                Pages = 2,
+                ImageUrl = "http://example.com/favicon.ico",
+                Isbn = "0000005000000",
+                DownloadUrl = "http://downloadtest.com"
+            };
+
+            var booksService = new BooksService(context);
+
+            // Act
+            var result = await booksService.UpdateBookAsync(updateModel);
+
+            // Assert
+            Assert.True(result);
+
+            var updatedBook = await context.Books.SingleOrDefaultAsync(b => b.Id == testBook.Id);
+            Assert.NotNull(updatedBook);
+            Assert.Equal(updateModel.Title, updatedBook.Title);
+            Assert.Equal(updateModel.Author, updatedBook.Author);
+            Assert.Equal(updateModel.Price, updatedBook.Price);
+            Assert.Equal(updateModel.Year, updatedBook.Year);
+            Assert.Equal(updateModel.Description, updatedBook.Description);
+            Assert.Equal(updateModel.ShortDescription, updatedBook.ShortDescription);
+            Assert.Equal(updateModel.Pages, updatedBook.Pages);
+            Assert.Equal(updateModel.ImageUrl, updatedBook.ImageUrl);
+            Assert.Equal(updateModel.Isbn, updatedBook.Isbn);
+            Assert.Equal(updateModel.DownloadUrl, updatedBook.DownloadUrl);
+        }
+
+        [Fact]
+        public async Task UpdateBooksAsync_WithInvalidModel_ReturnsFalse()
+        {
+            // Arrange
+            var context = this.NewInMemoryDatabase();
+
+            const string testTitle = "TestBook1";
+
+            var testBook = new Book
+            {
+                Title = testTitle,
+                Author = "TestAuthor1",
+                Price = 11,
+                Year = 2011,
+                Description = "TestDescription1",
+                ShortDescription = "TestShortDescription1",
+                Pages = 2,
+                ImageUrl = "http://example.com/favicon.ico1",
+                Isbn = "0000005000001",
+                DownloadUrl = "http://downloadtest.com/1"
+            };
+
+            await context.Books.AddAsync(testBook);
+            await context.SaveChangesAsync();
+
+            var updateModel = new BookEditServiceModel
+            {
+                Id = testBook.Id,
+                Title = "",
+                Author = "TestAuthor",
+                Price = 1,
+                Year = 2001,
+                Description = "TestDescription",
+                ShortDescription = "TestShortDescription",
+                Pages = 2,
+                ImageUrl = "http://example.com/favicon.ico",
+                Isbn = "0000005000000",
+                DownloadUrl = "http://downloadtest.com"
+            };
+
+            var booksService = new BooksService(context);
+
+            // Act
+            var result = await booksService.UpdateBookAsync(updateModel);
+
+            // Assert
+            Assert.False(result);
+
+            var updatedBook = await context.Books.SingleOrDefaultAsync(b => b.Id == testBook.Id);
+            Assert.NotNull(updatedBook);
+            Assert.Equal(testTitle, updatedBook.Title);
+        }
+
+        [Fact]
+        public async Task UpdateBooksAsync_WithInvalidId_ReturnsFalse()
+        {
+            // Arrange
+            var context = this.NewInMemoryDatabase();
+
+            var testBook = new Book
+            {
+                Title = "TestBook1",
+                Author = "TestAuthor1",
+                Price = 11,
+                Year = 2011,
+                Description = "TestDescription1",
+                ShortDescription = "TestShortDescription1",
+                Pages = 2,
+                ImageUrl = "http://example.com/favicon.ico1",
+                Isbn = "0000005000001",
+                DownloadUrl = "http://downloadtest.com/1"
+            };
+
+            await context.Books.AddAsync(testBook);
+            await context.SaveChangesAsync();
+
+            var updateModel = new BookEditServiceModel
+            {
+                Id = Guid.NewGuid().ToString(),
+                Title = "TestBook",
+                Author = "TestAuthor",
+                Price = 1,
+                Year = 2001,
+                Description = "TestDescription",
+                ShortDescription = "TestShortDescription",
+                Pages = 2,
+                ImageUrl = "http://example.com/favicon.ico",
+                Isbn = "0000005000000",
+                DownloadUrl = "http://downloadtest.com"
+            };
+
+            var booksService = new BooksService(context);
+
+            // Act
+            var result = await booksService.UpdateBookAsync(updateModel);
+
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public async Task DeleteBookAsync_WithCorrectData_WorksCorrectly()
+        {
+            // Arrange
+            var context = this.NewInMemoryDatabase();
+
+            var testBook = new Book();
+
+            await context.Books.AddAsync(testBook);
+            await context.SaveChangesAsync();
+
+            var booksService = new BooksService(context);
+
+            // Act
+            var result = await booksService.DeleteBookAsync(testBook.Id);
+
+            // Assert
+            Assert.True(result);
+            Assert.False(await context.Books.AnyAsync());
+        }
+
+        [Fact]
+        public async Task DeleteBookAsync_WithNullId_ReturnsFalse()
+        {
+            // Arrange
+            var context = this.NewInMemoryDatabase();
+
+            var testBook = new Book();
+
+            await context.Books.AddAsync(testBook);
+            await context.SaveChangesAsync();
+
+            var booksService = new BooksService(context);
+
+            // Act
+            var result = await booksService.DeleteBookAsync(null);
+
+            // Assert
+            Assert.False(result);
+            Assert.True(await context.Books.AnyAsync());
+        }
+
+        [Fact]
+        public async Task DeleteBookAsync_WithIncorrectId_ReturnsFalse()
+        {
+            // Arrange
+            var context = this.NewInMemoryDatabase();
+
+            var incorrectId = Guid.NewGuid().ToString();
+            var testBook = new Book();
+
+            await context.Books.AddAsync(testBook);
+            await context.SaveChangesAsync();
+
+            var booksService = new BooksService(context);
+
+            // Act
+            var result = await booksService.DeleteBookAsync(incorrectId);
+
+            // Assert
+            Assert.False(result);
+            Assert.True(await context.Books.AnyAsync());
+        }
+
+        [Fact]
+        public async Task GetBooksByFilteringAsync_WithAllFilters_WorksCorrectly()
+        {
+            // Arrange
+            var context = this.NewInMemoryDatabase();
+            
+            var expectedTitles = new[] {"Book5", "Book6"};
+
+            var testTagId = Guid.NewGuid().ToString();
+            var testPublisherId = Guid.NewGuid().ToString();
+
+            await context.Books.AddRangeAsync(
+                new Book
+                {
+                    Title = "Book6",
+                    BookTags = new[]
+                    {
+                        new BookTag {TagId = testTagId}
+                    },
+                    PublisherId = testPublisherId,
+                    Year = 2015,
+                    Price = 30
+                },
+                new Book
+                {
+                    Title = "Book5",
+                    BookTags = new[]
+                    {
+                        new BookTag {TagId = testTagId}
+                    },
+                    PublisherId = testPublisherId,
+                    Year = 2010,
+                    Price = 50
+                },
+                new Book
+                {
+                    Title = "Book4",
+                    BookTags = new[]
+                    {
+                        new BookTag {TagId = testTagId}
+                    },
+                    PublisherId = testPublisherId,
+                    Year = 2019,
+                    Price = 30
+                },
+                new Book
+                {
+                    Title = "Book3",
+                    BookTags = new[]
+                    {
+                        new BookTag {TagId = Guid.NewGuid().ToString()}
+                    },
+                    PublisherId = testPublisherId,
+                    Year = 2015,
+                    Price = 30
+                },
+                new Book
+                {
+                    Title = "Book2",
+                    BookTags = new[]
+                    {
+                        new BookTag {TagId = testTagId}
+                    },
+                    PublisherId = Guid.NewGuid().ToString(),
+                    Year = 2015,
+                    Price = 30
+                },
+                new Book
+                {
+                    Title = "Book1",
+                    BookTags = new[]
+                    {
+                        new BookTag {TagId = testTagId}
+                    },
+                    PublisherId = testPublisherId,
+                    Year = 2000,
+                    Price = 30
+                },
+                new Book
+                {
+                    Title = "Book0",
+                    BookTags = new[]
+                    {
+                        new BookTag {TagId = testTagId}
+                    },
+                    PublisherId = testPublisherId,
+                    Year = 2015,
+                    Price = 300
+                },
+                new Book
+                {
+                    Title = "Book10",
+                    BookTags = new[]
+                    {
+                        new BookTag {TagId = testTagId}
+                    },
+                    PublisherId = testPublisherId,
+                    Year = 2015,
+                    Price = 3
+                }
+            );
+
+            await context.SaveChangesAsync();
+
+            var booksService = new BooksService(context);
+
+            var serviceModel = new BookFilteringServiceModel
+            {
+                TagId = testTagId,
+                PublisherId = testPublisherId,
+                PriceFrom = 30,
+                PriceTo = 78.90m,
+                YearTo = 2015,
+                YearFrom = 2010
+            };
+
+            // Act
+            var actualTitles = (await booksService.GetBooksByFilteringAsync<BookListingServiceModel>(serviceModel))
+                .Select(b => b.Title)
+                .ToArray();
+
+            // Assert
+            Assert.NotNull(actualTitles);
+            Assert.Equal(2, actualTitles.Length);
+            Assert.Equal(expectedTitles, actualTitles);
+        }
+
+        [Fact]
+        public async Task GetBooksByFilteringAsync_WithNoMatching_ReturnsEmptyCollection()
+        {
+            // Arrange
+            var context = this.NewInMemoryDatabase();
+
+            var testTagId = Guid.NewGuid().ToString();
+            var testPublisherId = Guid.NewGuid().ToString();
+
+            await context.Books.AddRangeAsync(
+                new Book
+                {
+                    BookTags = new[]
+                    {
+                        new BookTag {TagId = testTagId}
+                    },
+                    PublisherId = testPublisherId,
+                    Year = 2019,
+                    Price = 30
+                },
+                new Book
+                {
+                    BookTags = new[]
+                    {
+                        new BookTag {TagId = Guid.NewGuid().ToString()}
+                    },
+                    PublisherId = testPublisherId,
+                    Year = 2015,
+                    Price = 30
+                },
+                new Book
+                {
+                    BookTags = new[]
+                    {
+                        new BookTag {TagId = testTagId}
+                    },
+                    PublisherId = Guid.NewGuid().ToString(),
+                    Year = 2015,
+                    Price = 30
+                }
+            );
+
+            await context.SaveChangesAsync();
+
+            var booksService = new BooksService(context);
+
+            var serviceModel = new BookFilteringServiceModel
+            {
+                TagId = testTagId,
+                PublisherId = testPublisherId,
+                PriceFrom = 30,
+                PriceTo = 78.90m,
+                YearTo = 2015,
+                YearFrom = 2010
+            };
+
+            // Act
+            var result = await booksService.GetBooksByFilteringAsync<BookListingServiceModel>(serviceModel);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Empty(result);
+        }
+
+        [Fact]
+        public async Task GetBooksByFilteringAsync_WithOneFilter_WorksCorrectly()
+        {
+            // Arrange
+            var context = this.NewInMemoryDatabase();
+
+            var expectedTitles = new[] {"Book2", "Book3"};
+
+            await context.Books.AddRangeAsync(
+                new Book
+                {
+                    Title = "Book3",
+                    Year = 2013
+                },
+                new Book
+                {
+                    Title = "Book2",
+                    Year = 2005,
+                },
+                new Book
+                {
+                    Title = "Book1",
+                    Year = 2000
+                }
+            );
+
+            await context.SaveChangesAsync();
+
+            var booksService = new BooksService(context);
+
+            var serviceModel = new BookFilteringServiceModel
+            {
+                YearFrom = 2005
+            };
+
+            // Act
+            var actualTitles = (await booksService.GetBooksByFilteringAsync<BookListingServiceModel>(serviceModel))
+                .Select(b => b.Title)
+                .ToArray();
+
+            // Assert
+            Assert.NotNull(actualTitles);
+            Assert.Equal(2, actualTitles.Length);
+            Assert.Equal(expectedTitles, actualTitles);
         }
     }
 }
