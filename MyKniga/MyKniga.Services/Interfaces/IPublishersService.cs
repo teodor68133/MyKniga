@@ -11,6 +11,7 @@ namespace MyKniga.Services.Interfaces
         Task<bool> AssignUserToPublisherAsync(string userId, string publisherId);
         Task<T> GetPublisherByIdAsync<T>(string id) where T : BasePublisherServiceModel;
         Task<bool> RemoveUserFromPublisherAsync(string userId);
+        Task<bool> UpdatePublisherAsync(PublisherEditServiceModel model);
         Task<bool> DeletePublisherAsync(string publisherId);
     }
 }

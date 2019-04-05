@@ -54,6 +54,30 @@ namespace MyKniga.Services
             return publishers;
         }
 
+        public async Task<bool> UpdatePublisherAsync(PublisherEditServiceModel model)
+        {
+            if (!this.IsEntityStateValid(model))
+            {
+                return false;
+            }
+
+            var publisher = await this.Context.Publishers.SingleOrDefaultAsync(p => p.Id == model.Id);
+
+            if (publisher == null)
+            {
+                return false;
+            }
+
+            publisher.Name = model.Name;
+            publisher.Description = model.Description;
+            publisher.ImageUrl = model.ImageUrl;
+
+            this.Context.Publishers.Update(publisher);
+            await this.Context.SaveChangesAsync();
+
+            return true;
+        }
+
         public async Task<bool> AssignUserToPublisherAsync(string userId, string publisherId)
         {
             if (userId == null || publisherId == null)
