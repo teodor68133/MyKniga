@@ -133,7 +133,7 @@
             var context = this.NewInMemoryDatabase();
             var expectedTagNames = new[] {"cat", "caterpillar"};
 
-            await context.AddRangeAsync(
+            await context.Tags.AddRangeAsync(
                 new Tag
                 {
                     Name = "dog"
