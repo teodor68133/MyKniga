@@ -4,8 +4,10 @@ namespace MyKniga.Web.Controllers
     using AutoMapper;
     using Common;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Models;
+    using MyKniga.Models;
     using Services.Interfaces;
     using Services.Models.Publisher;
 
@@ -44,6 +46,43 @@ namespace MyKniga.Web.Controllers
             }
 
             this.ShowSuccessMessage(NotificationMessages.PublisherCreateSuccessMessage);
+            return this.RedirectToAction("Index", "Home");
+        }
+
+        public async Task<IActionResult> Edit(string id)
+        {
+            var servicePublisher = await this.publishersService.GetPublisherByIdAsync<PublisherEditServiceModel>(id);
+
+            if (servicePublisher == null)
+            {
+                this.ShowErrorMessage(NotificationMessages.PublisherEditErrorMessage);
+                return this.RedirectToAction("Index", "Home");
+            }
+
+            var model = Mapper.Map<PublisherEditBindingModel>(servicePublisher);
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(PublisherEditBindingModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+
+            var serviceModel = Mapper.Map<PublisherEditServiceModel>(model);
+
+            var success = await this.publishersService.UpdatePublisherAsync(serviceModel);
+
+            if (!success)
+            {
+                this.ShowErrorMessage(NotificationMessages.PublisherEditErrorMessage);
+                return this.RedirectToAction("Index", "Home");
+            }
+
+            this.ShowSuccessMessage(NotificationMessages.PublisherEditSuccessMessage);
             return this.RedirectToAction("Index", "Home");
         }
     }

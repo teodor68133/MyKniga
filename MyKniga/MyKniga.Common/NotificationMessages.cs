@@ -12,6 +12,8 @@ namespace MyKniga.Common
         public const string PublisherAssignSuccessMessage = "Successfully assigned publisher";
         public const string PublisherRemoveFromUserErrorMessage = "An error occurred while removing publisher from user";
         public const string PublisherRemoveFromUserSuccessMessage = "Successfully removed publisher from user";
+        public const string PublisherEditErrorMessage = "An error occured while updating publisher";
+        public const string PublisherEditSuccessMessage = "Successfully updated publisher";
         public const string BookDeleteErrorMessage = "An error occured while deleting book";
         public const string BookDeleteSuccessMessage = "Successfully deleted book";
         public const string UserDeleteErrorMessage = "An error occured while deleting user";
