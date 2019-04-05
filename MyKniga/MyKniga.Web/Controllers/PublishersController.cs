@@ -1,5 +1,6 @@
 namespace MyKniga.Web.Controllers
 {
+    using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
     using Common;
@@ -84,6 +85,20 @@ namespace MyKniga.Web.Controllers
 
             this.ShowSuccessMessage(NotificationMessages.PublisherEditSuccessMessage);
             return this.RedirectToAction("Index", "Home");
+        }
+
+        public async Task<IActionResult> Administer()
+        {
+            var servicePublishers = await this.publishersService.GetAllPublishersAsync<PublisherDetailsServiceModel>();
+
+            var publishers = servicePublishers.Select(Mapper.Map<PublisherDetailsViewModel>);
+
+            var model = new AllPublishersViewModel
+            {
+                Publishers = publishers
+            };
+
+            return this.View(model);
         }
     }
 }
