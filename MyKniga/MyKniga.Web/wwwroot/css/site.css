@@ -6,6 +6,32 @@
     background-color: #e6e6e6;
 }
 
+.login-box {
+    background-color: rgba(23, 23, 23, .5);
+    border-radius: 2.5em;
+}
+
+.login-box button {
+    border-radius: 0;
+}
+
+.login-box input {
+    background-color: transparent !important;
+    color: white !important;
+    border: none;
+    border-radius: 0;
+    transition: border-bottom, 300ms;
+    border-bottom: 1px solid rgba(255, 255, 255, .2);
+}
+
+.login-box input:focus, input:hover {
+    border: none;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 1);
+
+    box-shadow: none;
+}
+
 .book-thumbnail-img {
     height: 30vh;
     object-fit: cover;
@@ -59,10 +85,10 @@
     background-size: cover;
     background-position: center;
     height: 100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 .index-heading {
@@ -78,6 +104,6 @@
 }
 
 .index-text-container {
-    background-color: rgba(23,23,23, .7);
+    background-color: rgba(23, 23, 23, .7);
     width: 100%;
 }
