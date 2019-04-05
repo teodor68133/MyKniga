@@ -34,6 +34,18 @@ namespace MyKniga.Web.Controllers
                 .ProjectTo<UserListingViewModel>()
                 .ToArrayAsync();
 
+            var adminIds = (await this.userManager.GetUsersInRoleAsync(GlobalConstants.AdministratorRoleName))
+                .Select(u => u.Id)
+                .ToHashSet();
+
+            foreach (var user in allUsers)
+            {
+                if (adminIds.Contains(user.Id))
+                {
+                    user.IsAdmin = true;
+                }
+            }
+
             var allPublishers = (await this.publishersService.GetAllPublishersAsync<PublisherListingServiceModel>())
                 .Select(Mapper.Map<PublisherListingViewModel>)
                 .ToArray();
@@ -111,6 +123,58 @@ namespace MyKniga.Web.Controllers
             }
 
             this.ShowSuccessMessage(NotificationMessages.PublisherRemoveFromUserSuccessMessage);
+            return this.RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PromoteUser(string userId)
+        {
+            if (userId == null)
+            {
+                this.ShowErrorMessage(NotificationMessages.UserPromoteErrorMessage);
+                return this.RedirectToAction("Index");
+            }
+
+            var user = await this.userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                this.ShowErrorMessage(NotificationMessages.UserPromoteErrorMessage);
+                return this.RedirectToAction("Index");
+            }
+
+            if (!await this.userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName))
+            {
+                await this.userManager.AddToRoleAsync(user, GlobalConstants.AdministratorRoleName);
+            }
+
+            this.ShowSuccessMessage(NotificationMessages.UserPromoteSuccessMessage);
+            return this.RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DemoteUser(string userId)
+        {
+            if (userId == null)
+            {
+                this.ShowErrorMessage(NotificationMessages.UserPromoteErrorMessage);
+                return this.RedirectToAction("Index");
+            }
+
+            var user = await this.userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                this.ShowErrorMessage(NotificationMessages.UserPromoteErrorMessage);
+                return this.RedirectToAction("Index");
+            }
+
+            if (await this.userManager.IsInRoleAsync(user, GlobalConstants.AdministratorRoleName))
+            {
+                await this.userManager.RemoveFromRoleAsync(user, GlobalConstants.AdministratorRoleName);
+            }
+
+            this.ShowSuccessMessage(NotificationMessages.UserDemoteSuccessMessage);
             return this.RedirectToAction("Index");
         }
 

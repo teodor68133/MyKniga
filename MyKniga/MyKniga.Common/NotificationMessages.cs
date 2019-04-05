@@ -22,5 +22,9 @@ namespace MyKniga.Common
         public const string UserDeleteSuccessMessage = "Successfully deleted user";
         public const string BookEditErrorMessage = "An error occured while editing book";
         public const string BookEditSuccessMessage = "Successfully edited book";
+        public const string UserPromoteErrorMessage = "An error occured while promoting user";
+        public const string UserPromoteSuccessMessage = "Successfully promoted user";
+        public const string UserDemoteErrorMessage = "An error occured while demoting user";
+        public const string UserDemoteSuccessMessage = "Successfully demoted user";
     }
 }
