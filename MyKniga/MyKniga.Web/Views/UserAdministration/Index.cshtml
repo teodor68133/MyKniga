@@ -17,22 +17,30 @@
     {
         <tr class="row">
             <td class="col-6">
-                <div class="d-flex flex-row justify-content-between">
-                    @user.UserName
+                <div class="d-flex justify-content-between flex-column flex-md-row">
                     <div>
-                        @if (!user.IsAdmin)
+                        @if (user.IsAdmin)
                         {
-                            <button class="btn btn-primary" data-toggle="modal"
-                                    data-target="#promoteModal" data-user-id="@user.Id">
-                                <i class="fas fa-user-tie"></i>
+                            <span class="text-success font-weight-bold">@user.UserName</span>
+                        }
+                        else
+                        {
+                            @user.UserName
+                        }
+                    </div>
+                    <div>
+                        @if (user.IsAdmin)
+                        {
+                            <button class="btn btn-warning" data-toggle="modal"
+                                    data-target="#demoteModal" data-user-id="@user.Id">
+                                <i class="fas fa-user-minus"></i>
                             </button>
                         }
                         else
                         {
-                            @:Administrator
-                            <button class="btn btn-warning" data-toggle="modal"
-                                    data-target="#demoteModal" data-user-id="@user.Id">
-                                <i class="fas fa-user-minus"></i>
+                            <button class="btn btn-primary" data-toggle="modal"
+                                    data-target="#promoteModal" data-user-id="@user.Id">
+                                <i class="fas fa-user-tie"></i>
                             </button>
                         }
                         <button class="btn btn-danger" data-toggle="modal"
