@@ -1,0 +1,70 @@
+[
+  {
+    "outputFileName": "wwwroot/assets/vendor.min.css",
+    "inputFiles": [
+      "wwwroot-source/vendor/bootstrap.min.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/assets/vendor.min.js",
+    "inputFiles": [
+      "wwwroot-source/vendor/jquery.min.js",
+      "wwwroot-source/vendor/popper.min.js",
+      "wwwroot-source/vendor/bootstrap.min.js",
+      "wwwroot-source/vendor/jquery.validate.min.js",
+      "wwwroot-source/vendor/jquery.validate.unobtrusive.min.js"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/assets/main.min.css",
+    "inputFiles": [
+      "wwwroot-source/main/site.css"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/assets/main.min.js",
+    "inputFiles": [
+      "wwwroot-source/main/main.js"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/assets/tag-listing.min.js",
+    "inputFiles": [
+      "wwwroot-source/tag-listing/tag-listing.js"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/assets/book-listing.min.js",
+    "inputFiles": [
+      "wwwroot-source/book-listing/book-listing.js"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/assets/login.min.js",
+    "inputFiles": [
+      "wwwroot-source/login/three.r92.min.js",
+      "wwwroot-source/login/vanta.waves.min.js"
+    ],
+    "minify": {
+      "enabled": true
+    }
+  }
+]
