@@ -49,7 +49,7 @@ namespace MyKniga.Web.Controllers
             }
 
             this.ShowSuccessMessage(NotificationMessages.PublisherCreateSuccessMessage);
-            return this.RedirectToAction("Index", "Home");
+            return this.RedirectToAction("Administer");
         }
 
         public async Task<IActionResult> Edit(string id)
@@ -59,7 +59,7 @@ namespace MyKniga.Web.Controllers
             if (servicePublisher == null)
             {
                 this.ShowErrorMessage(NotificationMessages.PublisherEditErrorMessage);
-                return this.RedirectToAction("Index", "Home");
+                return this.RedirectToAction("Administer");
             }
 
             var model = Mapper.Map<PublisherEditBindingModel>(servicePublisher);
@@ -82,11 +82,11 @@ namespace MyKniga.Web.Controllers
             if (!success)
             {
                 this.ShowErrorMessage(NotificationMessages.PublisherEditErrorMessage);
-                return this.RedirectToAction("Index", "Home");
+                return this.RedirectToAction("Administer");
             }
 
             this.ShowSuccessMessage(NotificationMessages.PublisherEditSuccessMessage);
-            return this.RedirectToAction("Index", "Home");
+            return this.RedirectToAction("Administer");
         }
 
         public async Task<IActionResult> Administer()
