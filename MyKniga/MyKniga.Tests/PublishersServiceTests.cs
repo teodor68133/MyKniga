@@ -508,5 +508,94 @@
             Assert.NotNull(updatedPublisher);
             Assert.Equal(publisherToAdd.Name, updatedPublisher.Name);
         }
+
+        [Fact]
+        public async Task DeletePublisherAsync_WithCorrectId_WorksCorrectly()
+        {
+            // Arrange
+            var context = this.NewInMemoryDatabase();
+
+            var publisher = new Publisher
+            {
+                Name = "TestName",
+                Description = "TestDescription",
+                ImageUrl = "http://www.test.com",
+            };
+
+            var otherPublisher = new Publisher
+            {
+                Name = "OtherPublisher",
+                Description = "TestDescription",
+                ImageUrl = "http://www.test.com",
+            };
+
+            await context.Publishers.AddRangeAsync(publisher, otherPublisher);
+            await context.SaveChangesAsync();
+
+            var publishersService = new PublishersService(context);
+
+            // Act
+            var result = await publishersService.DeletePublisherAsync(publisher.Id);
+
+            // Assert
+            Assert.True(result);
+            Assert.False(await context.Publishers.AnyAsync(p => p.Id == publisher.Id));
+            Assert.True(await context.Publishers.AnyAsync(p => p.Id == otherPublisher.Id));
+            Assert.Equal(1, await context.Publishers.CountAsync());
+        }
+
+        [Fact]
+        public async Task DeletePublisherAsync_WithNullId_WorksCorrectly()
+        {
+            // Arrange
+            var context = this.NewInMemoryDatabase();
+
+            var publisher = new Publisher
+            {
+                Name = "TestName",
+                Description = "TestDescription",
+                ImageUrl = "http://www.test.com",
+            };
+
+            await context.Publishers.AddAsync(publisher);
+            await context.SaveChangesAsync();
+
+            var publishersService = new PublishersService(context);
+
+            // Act
+            var result = await publishersService.DeletePublisherAsync(null);
+
+            // Assert
+            Assert.False(result);
+            Assert.True(await context.Publishers.AnyAsync(p => p.Id == publisher.Id));
+            Assert.Equal(1, await context.Publishers.CountAsync());
+        }
+
+        [Fact]
+        public async Task DeletePublisherAsync_WithNonexistentId_WorksCorrectly()
+        {
+            // Arrange
+            var context = this.NewInMemoryDatabase();
+
+            var publisher = new Publisher
+            {
+                Name = "TestName",
+                Description = "TestDescription",
+                ImageUrl = "http://www.test.com",
+            };
+
+            await context.Publishers.AddAsync(publisher);
+            await context.SaveChangesAsync();
+
+            var publishersService = new PublishersService(context);
+
+            // Act
+            var result = await publishersService.DeletePublisherAsync(Guid.NewGuid().ToString());
+
+            // Assert
+            Assert.False(result);
+            Assert.True(await context.Publishers.AnyAsync(p => p.Id == publisher.Id));
+            Assert.Equal(1, await context.Publishers.CountAsync());
+        }
     }
 }
