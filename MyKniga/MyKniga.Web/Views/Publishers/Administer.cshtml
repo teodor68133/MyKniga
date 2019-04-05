@@ -4,33 +4,33 @@
     ViewData["Title"] = "Publisher Administration";
 }
 
-<div class="text-center w-50 mx-auto">
+<div class="text-center w-75 mx-auto">
     <h1>Publishers</h1>
     <a class="btn btn-primary" asp-controller="Publishers" asp-action="Create">Create</a>
-</div>
 
-@foreach (var publisher in Model.Publishers)
-{
-    <div class="row">
-        <div class="col-12 col-lg-3 text-center">
-            <img src="@publisher.ImageUrl" class="book-listing-img" alt="@publisher.Name"/>
-        </div>
-        <div class="col-12 col-lg-6">
-            <div class="mx-3">
-                <h4 class="mt-2">@publisher.Name</h4>
-                <p class="text-secondary">@publisher.Description</p>
+    @foreach (var publisher in Model.Publishers)
+    {
+        <div class="row">
+            <div class="col-12 col-lg-3 text-center">
+                <img src="@publisher.ImageUrl" class="book-listing-img" alt="@publisher.Name"/>
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="mx-3">
+                    <h4 class="mt-2">@publisher.Name</h4>
+                    <p class="text-secondary">@publisher.Description</p>
+                </div>
+            </div>
+            <div class="col-12 col-lg-3 text-right d-flex flex-column justify-content-around">
+                <a class="btn btn-info my-1" asp-controller="Publishers" asp-action="Edit" asp-route-id="@publisher.Id">
+                    <i class="fas fa-pen"></i>
+                    Edit
+                </a>
+                <a class="btn btn-danger my-1" asp-controller="Publishers" asp-action="ConfirmDeletion" asp-route-id="@publisher.Id">
+                    <i class="far fa-trash-alt"></i>
+                    Delete
+                </a>
             </div>
         </div>
-        <div class="col-12 col-lg-3 text-right d-flex flex-column justify-content-around">
-            <a class="btn btn-info mt-1" asp-controller="Publishers" asp-action="Edit" asp-route-id="@publisher.Id">
-                <i class="fas fa-pen"></i>
-                Edit
-            </a>
-            <a class="btn btn-danger mb-1" asp-controller="Publishers" asp-action="ConfirmDeletion" asp-route-id="@publisher.Id">
-                <i class="far fa-trash-alt"></i>
-                Delete
-            </a>
-        </div>
-    </div>
-    <hr/>
-}
+        <hr/>
+    }
+</div>
