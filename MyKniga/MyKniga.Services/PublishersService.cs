@@ -8,7 +8,7 @@ namespace MyKniga.Services
     using Data;
     using Interfaces;
     using Microsoft.EntityFrameworkCore;
-    using Models;
+    using Models.Publisher;
     using MyKniga.Models;
 
     public class PublishersService : BaseService, IPublishersService
@@ -43,11 +43,12 @@ namespace MyKniga.Services
             return true;
         }
 
-        public async Task<IEnumerable<PublisherListingServiceModel>> GetAllPublishersAsync()
+        public async Task<IEnumerable<T>> GetAllPublishersAsync<T>()
+            where T : BasePublisherServiceModel
         {
             var publishers = await this.Context.Publishers
                 .OrderBy(p => p.Name)
-                .ProjectTo<PublisherListingServiceModel>()
+                .ProjectTo<T>()
                 .ToArrayAsync();
 
             return publishers;

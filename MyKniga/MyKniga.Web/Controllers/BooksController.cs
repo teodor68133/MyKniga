@@ -10,6 +10,7 @@ namespace MyKniga.Web.Controllers
     using Services.Interfaces;
     using Services.Models;
     using Services.Models.Book;
+    using Services.Models.Publisher;
 
     public class BooksController : BaseController
     {
@@ -71,7 +72,7 @@ namespace MyKniga.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var servicePublishers = await this.publishersService.GetAllPublishersAsync();
+            var servicePublishers = await this.publishersService.GetAllPublishersAsync<PublisherListingServiceModel>();
             var serviceTags = await this.tagsService.GetAllTagsAsync();
 
             var publishers = servicePublishers.Select(Mapper.Map<PublisherListingViewModel>).ToArray();

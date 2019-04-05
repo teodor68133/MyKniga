@@ -1,10 +1,8 @@
-namespace MyKniga.Services.Models
+namespace MyKniga.Services.Models.Publisher
 {
     using System.ComponentModel.DataAnnotations;
-    using Common.Mapping.Interfaces;
-    using MyKniga.Models;
 
-    public class PublisherCreateServiceModel : IMapWith<Publisher>
+    public class PublisherCreateServiceModel : BasePublisherServiceModel
     {
         [Required]
         [MaxLength(40)]

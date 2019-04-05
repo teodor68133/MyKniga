@@ -1,7 +1,7 @@
 namespace MyKniga.Web.Models
 {
     using Common.Mapping.Interfaces;
-    using Services.Models;
+    using Services.Models.Publisher;
 
     public class PublisherListingViewModel : IMapWith<PublisherListingServiceModel>
     {

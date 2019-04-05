@@ -12,6 +12,7 @@ namespace MyKniga.Web.Controllers
     using Models;
     using MyKniga.Models;
     using Services.Interfaces;
+    using Services.Models.Publisher;
 
     [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
     public class UserAdministrationController : BaseController
@@ -33,7 +34,7 @@ namespace MyKniga.Web.Controllers
                 .ProjectTo<UserListingViewModel>()
                 .ToArrayAsync();
 
-            var allPublishers = (await this.publishersService.GetAllPublishersAsync())
+            var allPublishers = (await this.publishersService.GetAllPublishersAsync<PublisherListingServiceModel>())
                 .Select(Mapper.Map<PublisherListingViewModel>)
                 .ToArray();
 

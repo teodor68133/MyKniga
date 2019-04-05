@@ -7,7 +7,7 @@ namespace MyKniga.Web.Controllers
     using Microsoft.AspNetCore.Mvc;
     using Models;
     using Services.Interfaces;
-    using Services.Models;
+    using Services.Models.Publisher;
 
     [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
     public class PublishersController : BaseController
