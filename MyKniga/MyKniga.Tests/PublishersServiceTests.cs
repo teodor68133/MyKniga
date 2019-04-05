@@ -349,5 +349,164 @@
             var dbUser = await context.Users.SingleOrDefaultAsync();
             Assert.Equal(testPublisher.Id, dbUser.PublisherId);
         }
+
+        [Fact]
+        public async Task UpdatePublisherAsync_WithValidModel_WorksCorrectly()
+        {
+            // Arrange
+            var context = this.NewInMemoryDatabase();
+
+            var publisherToAdd = new Publisher
+            {
+                Name = "TestName",
+                Description = "TestDescription",
+                ImageUrl = "http://www.test.com",
+            };
+
+            await context.Publishers.AddAsync(publisherToAdd);
+            await context.SaveChangesAsync();
+
+            var publishersService = new PublishersService(context);
+
+            var model = new PublisherEditServiceModel
+            {
+                Id = publisherToAdd.Id,
+                Name = " NewName ",
+                Description = "NewDescription",
+                ImageUrl = "https://newurl.com/pic.jpg"
+            };
+
+            // Act
+            var result = await publishersService.UpdatePublisherAsync(model);
+
+            // Assert
+            Assert.True(result);
+
+            var updatedPublisher = await context.Publishers.SingleOrDefaultAsync(p => p.Id == publisherToAdd.Id);
+            Assert.NotNull(updatedPublisher);
+            Assert.Equal(model.Name.Trim(), updatedPublisher.Name);
+            Assert.Equal(model.Description, updatedPublisher.Description);
+            Assert.Equal(model.ImageUrl, updatedPublisher.ImageUrl);
+        }
+
+        [Fact]
+        public async Task UpdatePublisherAsync_WithInvalidModel_ReturnsFalse()
+        {
+            // Arrange
+            var context = this.NewInMemoryDatabase();
+
+            var publisherToAdd = new Publisher
+            {
+                Name = "TestName",
+                Description = "TestDescription",
+                ImageUrl = "http://www.test.com",
+            };
+
+            await context.Publishers.AddAsync(publisherToAdd);
+            await context.SaveChangesAsync();
+
+            var publishersService = new PublishersService(context);
+
+            var model = new PublisherEditServiceModel
+            {
+                Id = publisherToAdd.Id,
+                Name = null,
+                Description = "NewDescription",
+                ImageUrl = "https://newurl.com/pic.jpg"
+            };
+
+            // Act
+            var result = await publishersService.UpdatePublisherAsync(model);
+
+            // Assert
+            Assert.False(result);
+
+            var updatedPublisher = await context.Publishers.SingleOrDefaultAsync(p => p.Id == publisherToAdd.Id);
+            Assert.NotNull(updatedPublisher);
+            Assert.Equal(publisherToAdd.Name, updatedPublisher.Name);
+        }
+
+        [Fact]
+        public async Task UpdatePublisherAsync_WithNonexistentPublisher_ReturnsFalse()
+        {
+            // Arrange
+            var context = this.NewInMemoryDatabase();
+
+            var publisherToAdd = new Publisher
+            {
+                Name = "TestName",
+                Description = "TestDescription",
+                ImageUrl = "http://www.test.com",
+            };
+
+            await context.Publishers.AddAsync(publisherToAdd);
+            await context.SaveChangesAsync();
+
+            var publishersService = new PublishersService(context);
+
+            var model = new PublisherEditServiceModel
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = "NewName",
+                Description = "NewDescription",
+                ImageUrl = "https://newurl.com/pic.jpg"
+            };
+
+            // Act
+            var result = await publishersService.UpdatePublisherAsync(model);
+
+            // Assert
+            Assert.False(result);
+
+            var updatedPublisher = await context.Publishers.SingleOrDefaultAsync(p => p.Id == publisherToAdd.Id);
+            Assert.NotNull(updatedPublisher);
+            Assert.Equal(publisherToAdd.Name, updatedPublisher.Name);
+        }
+
+        [Fact]
+        public async Task UpdatePublisherAsync_WithTakenName_ReturnsFalse()
+        {
+            // Arrange
+            var context = this.NewInMemoryDatabase();
+
+            const string testName = "NewName";
+
+            var publisherToAdd = new Publisher
+            {
+                Name = "TestName",
+                Description = "TestDescription",
+                ImageUrl = "http://www.test.com",
+            };
+
+            var otherPublisher = new Publisher
+            {
+                Name = testName.ToUpper(),
+                Description = "TestDescription",
+                ImageUrl = "http://www.test.com",
+            };
+
+            await context.Publishers.AddRangeAsync(publisherToAdd, otherPublisher);
+            await context.SaveChangesAsync();
+
+            var publishersService = new PublishersService(context);
+
+            var model = new PublisherEditServiceModel
+            {
+                Id = publisherToAdd.Id,
+                Name = testName,
+                Description = "NewDescription",
+                ImageUrl = "https://newurl.com/pic.jpg"
+            };
+
+            // Act
+            var result = await publishersService.UpdatePublisherAsync(model);
+
+            // Assert
+            Assert.False(result);
+
+            var updatedPublisher = await context.Publishers.SingleOrDefaultAsync(p => p.Id == publisherToAdd.Id);
+            Assert.NotNull(updatedPublisher);
+            Assert.Equal(publisherToAdd.Name, updatedPublisher.Name);
+        }
     }
 }
