@@ -101,6 +101,20 @@ namespace MyKniga.Services
             return true;
         }
 
+        public async Task<IEnumerable<string>> GetAllUserIdsInPublisherAsync(string publisherId)
+        {
+            if (publisherId == null)
+            {
+                return null;
+            }
+
+            var userIds = await this.Context.Users.Where(u => u.PublisherId == publisherId)
+                .Select(u => u.Id)
+                .ToArrayAsync();
+
+            return userIds;
+        }
+
         public async Task<bool> RemoveUserFromPublisherAsync(string userId)
         {
             if (userId == null)
