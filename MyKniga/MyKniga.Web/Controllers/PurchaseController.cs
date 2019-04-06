@@ -17,11 +17,14 @@ namespace MyKniga.Web.Controllers
     {
         private readonly IPurchasesService purchasesService;
         private readonly IBooksService booksService;
+        private readonly IUsersService usersService;
 
-        public PurchaseController(IPurchasesService purchasesService, IBooksService booksService)
+        public PurchaseController(IPurchasesService purchasesService, IBooksService booksService,
+            IUsersService usersService)
         {
             this.purchasesService = purchasesService;
             this.booksService = booksService;
+            this.usersService = usersService;
         }
 
         public async Task<IActionResult> ConfirmPurchase(string bookId)
@@ -94,6 +97,23 @@ namespace MyKniga.Web.Controllers
             var servicedBooks = await this.purchasesService.GetPurchasesForUserAsync(this.User.Identity.Name);
 
             var viewModel = servicedBooks.Select(Mapper.Map<PurchaseListingViewModel>);
+
+            return this.View(viewModel);
+        }
+
+        [Authorize(Roles = GlobalConstants.PublisherRoleName)]
+        public async Task<IActionResult> Publisher()
+        {
+            var publisherId = await this.usersService.GetPublisherIdByUserNameAsync(this.User.Identity.Name);
+
+            if (publisherId == null)
+            {
+                return this.Forbid();
+            }
+
+            var serviceBooks = await this.purchasesService.GetPurchasesForPublisherAsync(publisherId);
+
+            var viewModel = serviceBooks.Select(Mapper.Map<PurchaseAdminListingViewModel>);
 
             return this.View(viewModel);
         }

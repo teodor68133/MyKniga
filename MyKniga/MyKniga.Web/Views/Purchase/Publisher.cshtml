@@ -1,0 +1,36 @@
+@model IEnumerable<PurchaseAdminListingViewModel>
+
+@{
+    ViewData["Title"] = "Purchases";
+}
+
+<h1 class="text-center">Purchases</h1>
+<table class="table table-hover text-center">
+    <thead>
+    <tr class="font-weight-bold text-center row">
+        <th class="col-5">Book</th>
+        <th class="col-2">Date</th>
+        <th class="col-2">Price</th>
+        <th class="col-3">User</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var purchase in Model)
+    {
+        <tr class="row">
+            <td class="col-5">
+                <a asp-controller="Books" asp-action="Details" asp-route-id="@purchase.Book.Id">@purchase.Book.Title</a>
+            </td>
+            <td class="col-2">
+                @purchase.PurchaseDate.ToString("dd.MM.yyyy")
+            </td>
+            <td class="col-2 text-success">
+                €@purchase.Book.Price
+            </td>
+            <td class="col-3">
+                @purchase.UserEmail
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
