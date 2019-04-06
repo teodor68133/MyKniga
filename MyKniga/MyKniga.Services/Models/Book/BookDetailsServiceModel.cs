@@ -1,6 +1,7 @@
 namespace MyKniga.Services.Models.Book
 {
     using System.Collections.Generic;
+    using Publisher;
 
     public class BookDetailsServiceModel : BookWithPublisherServiceModel
     {
@@ -25,5 +26,7 @@ namespace MyKniga.Services.Models.Book
         public string Isbn { get; set; }
 
         public IEnumerable<BookTagDisplayServiceModel> BookTags { get; set; }
+
+        public PublisherDetailsServiceModel Publisher { get; set; }
     }
 }

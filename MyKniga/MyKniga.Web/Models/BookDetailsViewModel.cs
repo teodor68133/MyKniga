@@ -35,5 +35,7 @@ namespace MyKniga.Web.Models
         public IEnumerable<BookTagDisplayViewModel> BookTags { get; set; }
 
         public IEnumerable<TagDisplayViewModel> AllTags { get; set; }
+
+        public PublisherDetailsViewModel Publisher { get; set; }
     }
 }
