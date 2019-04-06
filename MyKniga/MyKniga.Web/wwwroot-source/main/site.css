@@ -94,16 +94,26 @@
 .index-heading {
     color: white;
     font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-    font-size: 4em;
     padding: 10px 20px;
+    font-size: 8vw;
 }
 
 .index-paragraph {
     color: gray;
-    font-size: 3em;
+    font-size: 7vw;
 }
 
 .index-text-container {
     background-color: rgba(23, 23, 23, .7);
     width: 100%;
+}
+
+@media (min-width: 768px) {
+    .index-heading {
+        font-size: 4vw;
+    }
+
+    .index-paragraph {
+        font-size: 3vw;
+    }
 }
