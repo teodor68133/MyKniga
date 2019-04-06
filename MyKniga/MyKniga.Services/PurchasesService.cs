@@ -67,5 +67,21 @@ namespace MyKniga.Services
 
             return isPurchased;
         }
+
+        public async Task<IEnumerable<PurchaseAdminListingServiceModel>> GetPurchasesForPublisherAsync(string publisherId)
+        {
+            if (publisherId == null)
+            {
+                return null;
+            }
+
+            var purchases = await this.Context.Purchases
+                .Where(p => p.Book.PublisherId == publisherId)
+                .OrderByDescending(p => p.PurchaseDate)
+                .ProjectTo<PurchaseAdminListingServiceModel>()
+                .ToArrayAsync();
+
+            return purchases;
+        }
     }
 }
