@@ -117,5 +117,15 @@ namespace MyKniga.Web.Controllers
 
             return this.View(viewModel);
         }
+
+        [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+        public async Task<IActionResult> All()
+        {
+            var serviceBooks = await this.purchasesService.GetAllPurchasesAsync();
+
+            var viewModel = serviceBooks.Select(Mapper.Map<PurchaseAdminListingViewModel>);
+
+            return this.View(viewModel);
+        }
     }
 }
