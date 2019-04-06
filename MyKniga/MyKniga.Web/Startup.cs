@@ -1,5 +1,6 @@
 ﻿namespace MyKniga.Web
 {
+    using System;
     using AutoMapper;
     using Common;
     using Common.Mapping;
@@ -67,6 +68,9 @@
                     policy => policy.RequireRole(
                         GlobalConstants.PublisherRoleName, GlobalConstants.AdministratorRoleName));
             });
+
+            services.Configure<SecurityStampValidatorOptions>(
+                options => { options.ValidationInterval = TimeSpan.Zero; });
 
             services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
