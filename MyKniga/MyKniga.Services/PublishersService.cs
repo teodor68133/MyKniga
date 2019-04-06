@@ -1,5 +1,6 @@
 namespace MyKniga.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -71,7 +72,8 @@ namespace MyKniga.Services
             var nameToCheck = model.Name.Trim().ToLower();
 
             // Check if publisher name has already been taken
-            if (await this.Context.Publishers.AnyAsync(p => p.Name.ToLower() == nameToCheck))
+            if (!string.Equals(publisher.Name, model.Name, StringComparison.CurrentCultureIgnoreCase) &&
+                await this.Context.Publishers.AnyAsync(p => p.Name.ToLower() == nameToCheck))
             {
                 return false;
             }
