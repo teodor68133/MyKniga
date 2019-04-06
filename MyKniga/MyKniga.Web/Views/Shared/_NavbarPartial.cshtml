@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-darker">
-    
+
     <div class="container">
         <a class="navbar-brand" href="/">
             <img src="~/brand.png" width="30" height="30" alt=""/>
@@ -50,6 +50,13 @@
                             <h5 class="dropdown-header">Administration</h5>
                             <a class="dropdown-item" asp-controller="Publishers" asp-action="Administer">Publishers</a>
                             <a class="dropdown-item" asp-controller="UserAdministration" asp-action="Index">Users</a>
+
+                            @if (!User.IsInRole(GlobalConstants.PublisherRoleName))
+                            {
+                                <div class="dropdown-divider"></div>
+                                <h5 class="dropdown-header">Publisher</h5>
+                                <a class="dropdown-item" asp-controller="Tags" asp-action="Administer">Administer Tags</a>
+                            }
                         </div>
                     </li>
                 }
