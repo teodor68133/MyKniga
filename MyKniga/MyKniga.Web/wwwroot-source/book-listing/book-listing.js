@@ -13,11 +13,11 @@ function refreshBooks() {
                         <img src="${escapeHtml(book.imageUrl)}" class="card-img-top book-thumbnail-img" 
                              alt="${escapeHtml(book.title)}">
                         <div class="card-body">
-                            <h6 class="card-title">
+                            <h4 class="card-title">
                                 <a href="/books/details/${book.id}" class="text-dark stretched-link">
                                     ${escapeHtml(book.title)}
                                 </a>
-                            </h6>
+                            </h4>
                             <p class="card-text">€${book.price}
                                 <br>
                                 ${escapeHtml(book.author)}
