@@ -390,6 +390,45 @@
         }
 
         [Fact]
+        public async Task UpdatePublisherAsync_WithSameName_WorksCorrectly()
+        {
+            // Arrange
+            var context = this.NewInMemoryDatabase();
+
+            var publisherToAdd = new Publisher
+            {
+                Name = "TestName",
+                Description = "TestDescription",
+                ImageUrl = "http://www.test.com",
+            };
+
+            await context.Publishers.AddAsync(publisherToAdd);
+            await context.SaveChangesAsync();
+
+            var publishersService = new PublishersService(context);
+
+            var model = new PublisherEditServiceModel
+            {
+                Id = publisherToAdd.Id,
+                Name = "testname",
+                Description = "NewDescription",
+                ImageUrl = "https://newurl.com/pic.jpg"
+            };
+
+            // Act
+            var result = await publishersService.UpdatePublisherAsync(model);
+
+            // Assert
+            Assert.True(result);
+
+            var updatedPublisher = await context.Publishers.SingleOrDefaultAsync(p => p.Id == publisherToAdd.Id);
+            Assert.NotNull(updatedPublisher);
+            Assert.Equal(model.Name, updatedPublisher.Name);
+            Assert.Equal(model.Description, updatedPublisher.Description);
+            Assert.Equal(model.ImageUrl, updatedPublisher.ImageUrl);
+        }
+
+        [Fact]
         public async Task UpdatePublisherAsync_WithInvalidModel_ReturnsFalse()
         {
             // Arrange
