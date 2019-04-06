@@ -7,7 +7,7 @@ namespace MyKniga.Web.Models
 
     public class PurchaseAdminListingViewModel : IMapWith<PurchaseAdminListingServiceModel>
     {
-        public BookListingServiceModel Book { get; set; }
+        public BookListingViewModel Book { get; set; }
 
         public DateTime PurchaseDate { get; set; }
 
