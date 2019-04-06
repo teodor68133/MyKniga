@@ -374,5 +374,208 @@
             // Assert
             Assert.False(result);
         }
+
+        [Fact]
+        public async Task GetPurchasesForPublisherAsync_WithCorrectData_WorksCorrectly()
+        {
+            // Arrange
+            var context = this.NewInMemoryDatabase();
+
+            var publisherId = Guid.NewGuid().ToString();
+
+            var expectedPurchases = new[]
+            {
+                new Purchase
+                {
+                    Book = new Book
+                    {
+                        PublisherId = publisherId,
+                        Title = "C#"
+                    },
+                    User = new KnigaUser
+                    {
+                        Email = "wa@wa.a"
+                    },
+                    PurchaseDate = DateTime.UtcNow
+                },
+                new Purchase
+                {
+                    Book = new Book
+                    {
+                        PublisherId = publisherId,
+                        Title = "Java"
+                    },
+                    User = new KnigaUser
+                    {
+                        Email = "wa@wa.a"
+                    },
+                    PurchaseDate = DateTime.UtcNow.AddDays(1)
+                }
+            };
+
+            await context.Purchases.AddRangeAsync(expectedPurchases);
+
+            await context.Purchases.AddAsync(
+                new Purchase
+                {
+                    Book = new Book
+                    {
+                        PublisherId = Guid.NewGuid().ToString(),
+                        Title = "C++"
+                    },
+                    User = new KnigaUser
+                    {
+                        Email = "wa@wa.a"
+                    },
+                    PurchaseDate = DateTime.UtcNow.AddDays(1)
+                }
+            );
+
+            await context.SaveChangesAsync();
+
+            var expectedTitle = expectedPurchases.OrderByDescending(p => p.PurchaseDate).First().Book.Title;
+
+            var purchasesService = new PurchasesService(context);
+
+            // Act
+            var actualPurchases = (await purchasesService.GetPurchasesForPublisherAsync(publisherId)).ToArray();
+
+            // Assert
+            var actualTitle = actualPurchases.First().Book.Title;
+
+            Assert.NotNull(actualPurchases);
+            Assert.Equal(2, actualPurchases.Length);
+            Assert.Equal(expectedTitle, actualTitle);
+        }
+
+        [Fact]
+        public async Task GetPurchasesForPublisherAsync_WithNullPublisherId_ReturnsNull()
+        {
+            // Arrange
+            var context = this.NewInMemoryDatabase();
+
+            await context.Purchases.AddAsync(new Purchase
+            {
+                Book = new Book
+                {
+                    PublisherId = Guid.NewGuid().ToString()
+                },
+                User = new KnigaUser
+                {
+                    Email = "wa@wa.a"
+                }
+            });
+
+            await context.SaveChangesAsync();
+
+            var purchasesService = new PurchasesService(context);
+
+            // Act
+            var result = await purchasesService.GetPurchasesForPublisherAsync(null);
+
+            // Assert
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public async Task GetPurchasesForPublisherAsync_WithNoPurchases_ReturnsEmptyCollection()
+        {
+            // Arrange
+            var context = this.NewInMemoryDatabase();
+
+            await context.Purchases.AddAsync(new Purchase
+            {
+                Book = new Book
+                {
+                    PublisherId = Guid.NewGuid().ToString()
+                },
+                User = new KnigaUser
+                {
+                    Email = "wa@wa.a"
+                }
+            });
+
+            await context.SaveChangesAsync();
+
+            var purchasesService = new PurchasesService(context);
+
+            // Act
+            var result = await purchasesService.GetPurchasesForPublisherAsync(Guid.NewGuid().ToString());
+
+            // Assert
+            Assert.Empty(result);
+        }
+
+        [Fact]
+        public async Task GetAllPurchasesAsync_WithCorrectData_WorksCorrectly()
+        {
+            // Arrange
+            var context = this.NewInMemoryDatabase();
+
+            var publisherId = Guid.NewGuid().ToString();
+
+            var expectedPurchases = new[]
+            {
+                new Purchase
+                {
+                    Book = new Book
+                    {
+                        PublisherId = publisherId,
+                        Title = "C#"
+                    },
+                    User = new KnigaUser
+                    {
+                        Email = "wa@wa.a"
+                    },
+                    PurchaseDate = DateTime.UtcNow
+                },
+                new Purchase
+                {
+                    Book = new Book
+                    {
+                        PublisherId = publisherId,
+                        Title = "Java"
+                    },
+                    User = new KnigaUser
+                    {
+                        Email = "wa@wa.a"
+                    },
+                    PurchaseDate = DateTime.UtcNow.AddDays(1)
+                }
+            };
+
+            await context.Purchases.AddRangeAsync(expectedPurchases);
+
+            await context.SaveChangesAsync();
+
+            var expectedTitle = expectedPurchases.OrderByDescending(p => p.PurchaseDate).First().Book.Title;
+
+            var purchasesService = new PurchasesService(context);
+
+            // Act
+            var actualPurchases = (await purchasesService.GetAllPurchasesAsync()).ToArray();
+
+            var actualTitle = actualPurchases.First().Book.Title;
+
+            // Assert
+            Assert.NotNull(actualPurchases);
+            Assert.Equal(2, actualPurchases.Length);
+            Assert.Equal(expectedTitle, actualTitle);
+        }
+
+        [Fact]
+        public async Task GetAllPurchasesAsync_WithNoPurchases_ReturnsEmptyCollection()
+        {
+            // Arrange
+            var context = this.NewInMemoryDatabase();
+
+            var purchasesService = new PurchasesService(context);
+
+            // Act
+            var result = await purchasesService.GetAllPurchasesAsync();
+
+            // Assert
+            Assert.Empty(result);
+        }
     }
 }
