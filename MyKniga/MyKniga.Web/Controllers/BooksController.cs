@@ -30,14 +30,14 @@ namespace MyKniga.Web.Controllers
             this.publishersService = publishersService;
         }
 
-        [Authorize(Policy = GlobalConstants.AdministratorOrPublisherPolicyName)]
+        [Authorize(Roles = GlobalConstants.PublisherRoleName)]
         public IActionResult Create()
         {
             return this.View();
         }
 
         [HttpPost]
-        [Authorize(Policy = GlobalConstants.AdministratorOrPublisherPolicyName)]
+        [Authorize(Roles = GlobalConstants.PublisherRoleName)]
         public async Task<IActionResult> Create(BookCreateBindingModel model)
         {
             if (!this.ModelState.IsValid)
