@@ -126,11 +126,16 @@ namespace MyKniga.Tests
             // Arrange
             var context = this.NewInMemoryDatabase();
             var booksService = new BooksService(context);
-            var expectedBook = new Book {Title = "Book1"};
+            var expectedBook = new Book
+            {
+                Title = "Book1",
+                Publisher = new Publisher()
+            };
 
             await context.Books.AddRangeAsync(expectedBook, new Book
             {
-                Title = "Book2"
+                Title = "Book2",
+                Publisher = new Publisher()
             });
 
             await context.SaveChangesAsync();
@@ -614,7 +619,7 @@ namespace MyKniga.Tests
         {
             // Arrange
             var context = this.NewInMemoryDatabase();
-            
+
             var expectedTitles = new[] {"Book5", "Book6"};
 
             var testTagId = Guid.NewGuid().ToString();
