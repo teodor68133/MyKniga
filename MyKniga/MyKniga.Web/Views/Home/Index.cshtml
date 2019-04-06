@@ -1,13 +1,52 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    Layout = "_HomeLayout";
 }
 
-@section UnderNavbar
-{
-    <header class="index-background">
-        <div class="index-text-container">
-            <h1 class="index-heading">Welcome to MyKniga</h1>
-            <p class="index-paragraph">The website for buying books</p>
+<header class="index-background">
+    <div class="index-text-container">
+        <h1 class="index-heading">Welcome to MyKniga</h1>
+        <p class="index-paragraph">The website for buying books</p>
+    </div>
+</header>
+<div class="about-holder text-center text-light overflow-auto p-5">
+    <img src="~/img/logo.png" alt="MyKniga"/>
+    <h1 class="index-heading">MyKniga</h1>
+    <h2 class="my-5">Making online book purchases easier since 1883.</h2>
+    <div class="team-holder mt-5">
+        <h2>Team</h2>
+        <div class="d-flex flex-column flex-lg-row justify-content-around">
+
+            <div class="team-member">
+                <img src="~/img/team/teodor.jpg"/>
+                <h1 class="my-3">Teodor Zlatkov</h1>
+                <h4>Structure, design, DB, UI, security, backend</h4>
+            </div>
+
+            <div class="team-member">
+                <img src="~/img/team/vladimir.jpg"/>
+                <h1 class="my-3">Vladimir Ivanov</h1>
+                <h4>Unit testing & UX</h4>
+            </div>
+
+            <div class="team-member">
+                <img src="~/img/team/denis.jpg"/>
+                <h1 class="my-3">Denislav Zaimov</h1>
+                <h4>Design & UI</h4>
+            </div>
+
+            <div class="team-member">
+                <img src="~/img/team/ivo.jpg"/>
+                <h1 class="my-3">Ivo Ivanov</h1>
+                <h4>Design & backend</h4>
+            </div>
+
+            <div class="team-member">
+                <img src="~/img/team/aleks.jpg"/>
+                <h1 class="my-3">Aleks Ivanov</h1>
+                <h4>Backend</h4>
+            </div>
+
         </div>
-    </header>
-}
+    </div>
+</div>

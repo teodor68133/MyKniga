@@ -81,7 +81,11 @@
 }
 
 .index-background {
-    background-image: url("/img/home-image.jpg");
+    background-image: linear-gradient(
+            rgba(23, 23, 23, 0) 85%,
+            rgba(23, 23, 23, 0.95)
+    ),
+    url("/img/home-image.jpg");
     background-size: cover;
     background-position: center;
     height: 100vh;
@@ -116,4 +120,51 @@
     .index-paragraph {
         font-size: 3vw;
     }
+}
+
+.about-holder {
+    height: 100vh;
+    background: linear-gradient(
+            rgba(23, 23, 23, 0.95) 5%,
+            rgba(23, 23, 23, 0.75) 20%,
+            rgba(23, 23, 23, 0.55)
+    ),
+    url("/img/home-image-2.jpg") center;
+    background-size: cover;
+
+    scrollbar-width: none;
+}
+
+.about-holder img {
+    height: 19vh;
+}
+
+.about-holder::-webkit-scrollbar {
+    display: none;
+}
+
+.team-holder {
+    height: 50vh;
+}
+
+.team-member {
+    margin: 3em;
+    flex-grow: 1;
+    flex-basis: 0;
+    transition-duration: 300ms;
+}
+
+.team-member:hover {
+    transform: translate(0, -15px);
+}
+
+.team-member h1 {
+    word-spacing: 100vw;
+}
+
+.team-member img {
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    height: 15vh;
 }
