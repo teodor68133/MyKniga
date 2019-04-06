@@ -51,6 +51,7 @@
                             <h5 class="dropdown-header">Administration</h5>
                             <a class="dropdown-item" asp-controller="Publishers" asp-action="Administer">Publishers</a>
                             <a class="dropdown-item" asp-controller="UserAdministration" asp-action="Index">Users</a>
+                            <a class="dropdown-item" asp-controller="Purchase" asp-action="All">All purchases</a>
 
                             @if (!User.IsInRole(GlobalConstants.PublisherRoleName))
                             {
