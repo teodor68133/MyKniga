@@ -83,5 +83,15 @@ namespace MyKniga.Services
 
             return purchases;
         }
+
+        public async Task<IEnumerable<PurchaseAdminListingServiceModel>> GetAllPurchasesAsync()
+        {
+            var purchases = await this.Context.Purchases
+                .OrderByDescending(p => p.PurchaseDate)
+                .ProjectTo<PurchaseAdminListingServiceModel>()
+                .ToArrayAsync();
+
+            return purchases;
+        }
     }
 }

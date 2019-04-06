@@ -10,5 +10,6 @@ namespace MyKniga.Services.Interfaces
         Task<IEnumerable<PurchaseListingServiceModel>> GetPurchasesForUserAsync(string userName);
         Task<bool> UserHasPurchasedBookAsync(string bookId, string userName);
         Task<IEnumerable<PurchaseAdminListingServiceModel>> GetPurchasesForPublisherAsync(string publisherId);
+        Task<IEnumerable<PurchaseAdminListingServiceModel>> GetAllPurchasesAsync();
     }
 }
