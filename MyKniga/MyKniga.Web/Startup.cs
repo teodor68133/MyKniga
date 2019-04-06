@@ -8,16 +8,17 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.UI;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Routing;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Data;
+    using Microsoft.Net.Http.Headers;
     using MyKniga.Models;
     using Services;
     using Services.Interfaces;
+    using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 
     public class Startup
     {
@@ -100,7 +101,16 @@
             app.UseStatusCodePages();
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            app.UseStaticFiles(
+                new StaticFileOptions
+                {
+                    OnPrepareResponse = ctx =>
+                    {
+                        const int cacheDurationInSeconds = 60 * 60 * 24 * 365; // 1 year
+                        ctx.Context.Response.Headers[HeaderNames.CacheControl] =
+                            $"public,max-age={cacheDurationInSeconds}";
+                    }
+                });
             app.UseCookiePolicy();
 
             app.UseAuthentication();
